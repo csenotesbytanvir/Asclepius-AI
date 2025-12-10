@@ -3,6 +3,57 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 import clsx from 'clsx';
 
+export const AsclepiusLogo = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 200 200" className={clsx("drop-shadow-lg", className)} fill="none">
+      <defs>
+          <linearGradient id="dnaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="var(--color-primary)" />
+              <stop offset="100%" stopColor="var(--color-accent)" />
+          </linearGradient>
+      </defs>
+      {/* Strand 1 */}
+      <path d="M60,20 Q100,60 60,100 T60,180" stroke="url(#dnaGradient)" strokeWidth="12" strokeLinecap="round" opacity="0.9" />
+      {/* Strand 2 */}
+      <path d="M140,20 Q100,60 140,100 T140,180" stroke="var(--color-secondary)" strokeWidth="12" strokeLinecap="round" opacity="0.9" />
+      
+      {/* Base Pairs */}
+      <line x1="70" y1="30" x2="130" y2="30" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
+      <line x1="85" y1="50" x2="115" y2="50" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
+      <line x1="85" y1="150" x2="115" y2="150" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
+      <line x1="70" y1="170" x2="130" y2="170" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
+
+      {/* Nodes */}
+      <circle cx="100" cy="60" r="8" fill="white" className="animate-pulse" />
+      <circle cx="100" cy="140" r="8" fill="white" className="animate-pulse" style={{animationDelay: '1s'}} />
+  </svg>
+);
+
+export const RxBadge = ({ className }: { className?: string }) => (
+  <div className={clsx("relative inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-900/40 border border-emerald-500/30 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]", className)}>
+     <span className="font-serif font-black italic text-sm pr-0.5 pt-0.5">Rx</span>
+     <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+  </div>
+);
+
+export const AppFooter = ({ disclaimer }: { disclaimer: string }) => (
+  <footer className="py-6 bg-surface/90 border-t border-surfaceHighlight text-center z-10 no-print backdrop-blur-xl absolute bottom-0 w-full">
+    <div className="container mx-auto px-4 flex flex-col items-center gap-3">
+       <div className="flex items-center gap-2 mb-1 opacity-70">
+          <AsclepiusLogo className="w-5 h-5" />
+          <span className="text-xs font-black tracking-widest text-textPrimary">ASCLEPIUS AI</span>
+       </div>
+       <p className="text-[10px] text-textSecondary font-bold tracking-[0.1em] uppercase flex items-center justify-center gap-2 max-w-xl text-center leading-relaxed">
+         <span className="w-1.5 h-1.5 bg-accent/50 rounded-full animate-pulse shrink-0"></span>
+         {disclaimer}
+       </p>
+       <div className="h-px w-24 bg-white/5 my-1"></div>
+       <p className="text-[9px] text-textSecondary font-mono opacity-50 uppercase tracking-wider">
+          © 2025 Asclepius AI • Architected by Tanvir Ahmmed • Version 2.0
+       </p>
+    </div>
+  </footer>
+);
+
 export interface CardProps {
   children?: React.ReactNode;
   className?: string;

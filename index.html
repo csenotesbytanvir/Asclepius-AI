@@ -4,7 +4,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Asclepius AI - Medical Intelligence</title>
+    <base href="/" />
+    <title>Asclepius AI - Clinical Decision Support</title>
+    <meta name="description" content="Advanced medical intelligence and clinical decision support system for healthcare professionals." />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script>
@@ -104,21 +106,23 @@
         --shadow-accent: 0 0 25px rgba(255, 255, 255, 0.15);
       }
 
-      body {
+      html, body {
         background-color: var(--bg-app);
         color: var(--text-primary);
         font-family: 'Inter', sans-serif;
         transition: background-color 0.5s ease, color 0.5s ease;
         margin: 0;
         padding: 0;
-        height: 100vh;
         width: 100vw;
+        min-height: 100%;
         overflow-x: hidden;
       }
       
       #root {
-        height: 100%;
+        min-height: 100vh;
         width: 100%;
+        display: flex;
+        flex-direction: column;
       }
       
       /* Global Animated Background Layer */

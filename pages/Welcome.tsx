@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Button } from '../components/Shared';
+import { Button, AsclepiusLogo, AppFooter } from '../components/Shared';
+import { I18N } from '../constants';
 
 interface WelcomeProps {
     onStart: () => void;
@@ -12,7 +13,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onStart }) => {
             {/* Global Aurora Background is handled in Layout or Index, but adding local for safety */}
             <div className="aurora-bg"></div>
 
-            <div className="relative z-10 space-y-12 max-w-lg w-full flex flex-col items-center">
+            <div className="relative z-10 space-y-12 max-w-lg w-full flex flex-col items-center flex-1 justify-center">
                 {/* System Pill */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surfaceHighlight/30 border border-white/10 shadow-lg backdrop-blur-md animate-in slide-in-from-top-8 duration-700">
                     <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse shadow-[0_0_10px_cyan]"></span>
@@ -22,29 +23,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ onStart }) => {
                 {/* DNA Icon Graphic */}
                 <div className="relative w-48 h-48 flex items-center justify-center animate-float">
                     <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary blur-3xl opacity-40 animate-pulse"></div>
-                    {/* DNA Helix SVG */}
-                    <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl">
-                        <defs>
-                            <linearGradient id="dnaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="var(--color-primary)" />
-                                <stop offset="100%" stopColor="var(--color-accent)" />
-                            </linearGradient>
-                        </defs>
-                        {/* Strand 1 */}
-                        <path d="M60,20 Q100,60 60,100 T60,180" fill="none" stroke="url(#dnaGradient)" strokeWidth="8" strokeLinecap="round" opacity="0.8" />
-                        {/* Strand 2 */}
-                        <path d="M140,20 Q100,60 140,100 T140,180" fill="none" stroke="var(--color-secondary)" strokeWidth="8" strokeLinecap="round" opacity="0.8" />
-                        
-                        {/* Connecting Base Pairs */}
-                        <line x1="70" y1="30" x2="130" y2="30" stroke="white" strokeWidth="2" strokeOpacity="0.3" />
-                        <line x1="85" y1="50" x2="115" y2="50" stroke="white" strokeWidth="2" strokeOpacity="0.3" />
-                        <line x1="85" y1="150" x2="115" y2="150" stroke="white" strokeWidth="2" strokeOpacity="0.3" />
-                        <line x1="70" y1="170" x2="130" y2="170" stroke="white" strokeWidth="2" strokeOpacity="0.3" />
-
-                        {/* Central Nodes */}
-                        <circle cx="100" cy="60" r="6" fill="white" className="animate-pulse" />
-                        <circle cx="100" cy="140" r="6" fill="white" className="animate-pulse" style={{animationDelay: '1s'}} />
-                    </svg>
+                    <AsclepiusLogo className="w-full h-full text-white" />
                 </div>
 
                 {/* Typography */}
@@ -78,9 +57,14 @@ export const Welcome: React.FC<WelcomeProps> = ({ onStart }) => {
                         </Button>
                     </div>
                     <p className="text-[9px] text-textSecondary text-center mt-6 font-mono opacity-60">
-                        Architected by Team Curadex • CONFIG v1.0
+                        Architected by Tanvir Ahmmed • CONFIG v2.0
                     </p>
                 </div>
+            </div>
+
+            {/* Footer */}
+            <div className="w-full relative z-10">
+                <AppFooter disclaimer={I18N.en.disclaimer.footer} />
             </div>
         </div>
     );

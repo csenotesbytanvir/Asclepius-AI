@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, DisclaimerBox, Input, Select } from '../components/Shared';
+import { Button, DisclaimerBox, Input, Select, AsclepiusLogo, RxBadge } from '../components/Shared';
 import { BodyMap } from '../components/BodyMap';
 import { generateAnalysis } from '../services/geminiService';
 import { cryptoService } from '../services/cryptoService';
@@ -49,7 +50,7 @@ export const SymptomChecker = () => {
       if (otherSymptomText.trim()) fullSymptoms.push(otherSymptomText.trim());
 
       const prompt = `
-        Role: Clinical Educational Assistant.
+        Role: Clinical Decision Support System.
         Task: Analyze these symptoms and return a structured JSON response wrapped in markdown code block.
         
         Patient: ${data.age}yo ${data.sex}, Name: ${data.name}
@@ -59,17 +60,15 @@ export const SymptomChecker = () => {
         Required JSON Structure:
         {
           "conditions": [
-            { "name": "Medical Name", "description": "2-3 sentences explaining why this fits." }
+            { "name": "Diagnosis/Differential", "description": "Clinical reasoning." }
           ],
           "treatments": [
-            { "name": "Drug Name", "dosage": "Standard generic strength (e.g. 200mg)", "description": "Short purpose." }
+            { "name": "Medication Name", "dosage": "Standard clinical dosage (e.g. 500mg BID)", "description": "Mechanism/Indication." }
           ],
           "lifestyle": [
             "Protocol 1", "Protocol 2"
           ]
         }
-        
-        Keep it educational. No high risk diagnoses unless red flags present.
       `;
       
       const rawText = await generateAnalysis(prompt, language);
@@ -116,7 +115,7 @@ export const SymptomChecker = () => {
             const recordMeta = {
               id: recordId,
               type: 'symptom',
-              title: `${result.demographics.name} - ${result.conditions?.[0]?.name || 'Analysis'}`,
+              title: `${result.demographics.name} - ${result.conditions?.[0]?.name || 'Clinical Note'}`,
               createdAt: Date.now(),
               language,
               iv,
@@ -173,12 +172,7 @@ export const SymptomChecker = () => {
                  </div>
                  <div className="flex flex-col items-end">
                      <div className="w-12 h-12 mb-2 bg-gradient-to-tr from-primary to-accent rounded-xl flex items-center justify-center shadow-lg">
-                         {/* Simple SVG DNA Icon for Print Header */}
-                         <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-8 h-8">
-                             <path d="M2 12c0-4 4-8 10-8s10 4 10 8" opacity="0.5"/>
-                             <path d="M2 12c0 4 4 8 10 8s10-4 10-8"/>
-                             <path d="M7 12h10" strokeLinecap="round"/>
-                         </svg>
+                         <AsclepiusLogo className="w-8 h-8 text-white" />
                      </div>
                      <span className="text-xs font-bold text-textPrimary tracking-[0.2em] uppercase">ASCLEPIUS AI</span>
                  </div>
@@ -188,7 +182,7 @@ export const SymptomChecker = () => {
              <div className="mb-8 print-break-inside-avoid">
                  <h3 className="text-sm font-bold text-accent uppercase tracking-widest mb-4 flex items-center gap-2">
                      <div className="w-2 h-2 bg-accent rounded-full"></div>
-                     Detected Conditions
+                     Clinical Assessment
                  </h3>
                  <div className="grid md:grid-cols-2 gap-4">
                      {result.conditions?.map((cond, i) => (
@@ -205,16 +199,19 @@ export const SymptomChecker = () => {
                  <div>
                      <h3 className="text-sm font-bold text-success uppercase tracking-widest mb-4 flex items-center gap-2">
                         <div className="w-2 h-2 bg-success rounded-full"></div>
-                        Suggested Treatments
+                        Pharmacotherapy Plan
                      </h3>
                      <div className="space-y-3">
                          {result.treatments?.map((tx, i) => (
-                             <div key={i} className="bg-surfaceHighlight/30 border border-white/5 rounded-xl p-4 flex items-center justify-between hover:bg-surfaceHighlight/50 transition-colors">
-                                 <div>
-                                     <span className="block font-bold text-textPrimary">{tx.name}</span>
-                                     <span className="text-xs text-textSecondary">{tx.description}</span>
+                             <div key={i} className="bg-surfaceHighlight/30 border border-white/5 rounded-xl p-4 flex items-center justify-between hover:bg-surfaceHighlight/50 transition-colors group">
+                                 <div className="flex items-start gap-3">
+                                     <RxBadge className="mt-1" />
+                                     <div>
+                                         <span className="block font-bold text-textPrimary group-hover:text-success transition-colors">{tx.name}</span>
+                                         <span className="text-xs text-textSecondary">{tx.description}</span>
+                                     </div>
                                  </div>
-                                 <span className="text-xs font-mono font-bold text-success bg-success/10 px-3 py-1.5 rounded-lg border border-success/20">
+                                 <span className="text-xs font-mono font-bold text-success bg-success/10 px-3 py-1.5 rounded-lg border border-success/20 ml-2 whitespace-nowrap">
                                      {tx.dosage}
                                  </span>
                              </div>
@@ -226,7 +223,7 @@ export const SymptomChecker = () => {
                  <div>
                      <h3 className="text-sm font-bold text-secondary uppercase tracking-widest mb-4 flex items-center gap-2">
                          <div className="w-2 h-2 bg-secondary rounded-full"></div>
-                         Lifestyle Protocols
+                         Non-Pharmacologic Interventions
                      </h3>
                      <div className="space-y-3">
                          {result.lifestyle?.map((item, i) => (
@@ -257,7 +254,7 @@ export const SymptomChecker = () => {
     <div className="max-w-5xl mx-auto space-y-6">
        <div className="flex items-center justify-between no-print mb-4 animate-in slide-in-from-top-4 duration-500">
         <h1 className="text-3xl font-black text-textPrimary tracking-tight flex items-center gap-3">
-           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Symptom</span> Analysis
+           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Clinical</span> Intake
         </h1>
         <div className="text-textSecondary text-sm font-mono flex items-center gap-2">
             <span className="w-2 h-2 bg-success rounded-full animate-pulse"></span>
@@ -271,13 +268,13 @@ export const SymptomChecker = () => {
       <div className="glass-panel border border-white/5 rounded-3xl p-8 relative overflow-hidden shadow-lg transition-all duration-300 animate-in fade-in duration-700">
           <div className="flex items-center gap-2 mb-6">
               <div className="w-2 h-2 bg-accent rounded-full shadow-glow-accent"></div>
-              <h3 className="text-xs font-bold text-textSecondary uppercase tracking-widest">Patient Profile</h3>
+              <h3 className="text-xs font-bold text-textSecondary uppercase tracking-widest">Patient Demographics</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-             <Input label="Full Name" placeholder="Enter name" {...register('name')} />
+             <Input label="Patient Name" placeholder="Full Name" {...register('name')} />
              <Input label="Age" type="number" placeholder="Years" {...register('age')} />
-             <Select label="Gender" {...register('sex')}>
+             <Select label="Biological Sex" {...register('sex')}>
                  <option value="Male">Male</option>
                  <option value="Female">Female</option>
                  <option value="Other">Other</option>
@@ -291,12 +288,12 @@ export const SymptomChecker = () => {
              <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-secondary rounded-full shadow-glow"></div>
                 <h3 className="text-xs font-bold text-textSecondary uppercase tracking-widest">
-                   {selectedPart ? `Step 2: Analysis for ${selectedPart.toUpperCase()}` : "Step 1: Select Body Region"}
+                   {selectedPart ? `Assessment: ${selectedPart.toUpperCase()}` : "Step 1: Select Anatomical Region"}
                 </h3>
              </div>
              {selectedPart && (
                  <Button variant="secondary" size="sm" onClick={() => { setSelectedPart(null); setSelectedSymptoms([]); setOtherSymptomText(''); }} className="text-xs border border-white/10 uppercase tracking-wide">
-                     <RefreshCcw size={14} className="mr-1" /> Change Area
+                     <RefreshCcw size={14} className="mr-1" /> Change Region
                  </Button>
              )}
           </div>
@@ -327,12 +324,12 @@ export const SymptomChecker = () => {
 
                   {/* Free text input */}
                   <div className="mb-8">
-                      <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1 mb-2 block">Other Symptoms (Optional)</label>
+                      <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1 mb-2 block">Clinical Notes / Other Symptoms</label>
                       <div className="relative">
                           <input 
                               value={otherSymptomText}
                               onChange={(e) => setOtherSymptomText(e.target.value)}
-                              placeholder="Describe other symptoms..." 
+                              placeholder="Describe other clinical findings..." 
                               className="w-full bg-surfaceHighlight/30 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-sm text-white placeholder-textSecondary/40 focus:border-primary focus:bg-surfaceHighlight/50 outline-none transition-all shadow-inner"
                           />
                           <PenTool className="absolute left-4 top-1/2 -translate-y-1/2 text-textSecondary" size={18} />

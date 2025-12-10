@@ -11,12 +11,12 @@ import {
   Menu,
   X,
   Languages,
-  Settings,
-  Dna
+  Settings
 } from 'lucide-react';
 import { I18N } from '../constants';
 import { useLanguage } from '../App';
 import { LANGUAGES, Language } from '../types';
+import { AsclepiusLogo, AppFooter } from './Shared';
 import clsx from 'clsx';
 
 interface LayoutProps {
@@ -50,7 +50,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
         <div className="flex items-center gap-2">
           {/* Mobile Logo */}
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-glow">
-               <Dna className="text-white w-5 h-5" />
+               <AsclepiusLogo className="text-white w-5 h-5" />
           </div>
           <span className="font-black text-lg tracking-wider font-sans">ASCLEPIUS</span>
         </div>
@@ -69,13 +69,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
           <div className="flex items-center gap-4 mb-2">
              <div className="relative w-12 h-12 flex items-center justify-center">
                  <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary opacity-40 blur-xl rounded-full animate-pulse"></div>
-                 {/* DNA Logo Component */}
-                 <div className="relative bg-surfaceHighlight/50 border border-white/10 rounded-xl p-2 shadow-glow flex items-center justify-center overflow-hidden">
-                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary w-6 h-6">
-                         <path d="M2 12c0-4 4-8 10-8s10 4 10 8" opacity="0.5"/>
-                         <path d="M2 12c0 4 4 8 10 8s10-4 10-8"/>
-                         <path d="M7 12h10" strokeLinecap="round"/>
-                     </svg>
+                 {/* Standardized Logo */}
+                 <div className="relative bg-surfaceHighlight/50 border border-white/10 rounded-xl p-1 shadow-glow flex items-center justify-center overflow-hidden w-full h-full">
+                     <AsclepiusLogo className="w-8 h-8 text-primary" />
                  </div>
              </div>
              <div>
@@ -130,7 +126,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
           ))}
         </nav>
 
-        {/* Footer */}
+        {/* Settings Footer in Sidebar */}
         <div className="p-4 border-t border-surfaceHighlight space-y-3 bg-surfaceHighlight/20 backdrop-blur-md">
             <div className="flex items-center justify-between px-2">
                  <span className="text-[10px] font-bold text-textSecondary uppercase tracking-widest">Interface Language</span>
@@ -153,7 +149,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
             <Settings className="h-5 w-5 group-hover:rotate-90 transition-transform duration-500" />
             <div className="text-left">
                 <span className="block font-bold text-xs text-textPrimary">{t.config}</span>
-                <span className="block text-[10px] opacity-60">v2.5.0 • Build 2025</span>
+                <span className="block text-[10px] opacity-60">System Settings</span>
             </div>
           </button>
         </div>
@@ -161,17 +157,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 md:pt-12 scroll-smooth pb-16 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 md:pt-12 scroll-smooth pb-32 custom-scrollbar">
            {children}
         </div>
         
-        {/* Persistent Footer */}
-        <footer className="py-3 bg-surface/80 border-t border-surfaceHighlight text-center z-10 no-print backdrop-blur-xl absolute bottom-0 w-full">
-          <p className="text-[10px] text-textSecondary font-bold tracking-[0.1em] uppercase flex items-center justify-center gap-2">
-             <span className="w-1.5 h-1.5 bg-accent/50 rounded-full animate-pulse"></span>
-             {I18N[language].disclaimer.footer}
-          </p>
-        </footer>
+        {/* Persistent App Footer */}
+        <AppFooter disclaimer={I18N[language].disclaimer.footer} />
       </main>
 
       {/* Mobile Sidebar Overlay */}

@@ -1,3 +1,4 @@
+
 import { I18nContent, Language } from './types';
 
 export const SYMPTOMS_BY_PART: Record<string, string[]> = {
@@ -43,18 +44,18 @@ export const I18N: Record<Language, I18nContent> = {
   en: {
     nav: {
       dashboard: "Overview",
-      symptomChecker: "Symptom Analysis",
+      symptomChecker: "Clinical Analysis",
       dermatology: "Dermatology Vision",
       rxScanner: "Rx Decrypter",
       labIntel: "Pathology Intel",
       chat: "Asclepius Chat",
       records: "Patient Records",
-      config: "Configuration"
+      config: "System Config"
     },
     common: {
-      save: "Auto-Saved",
+      save: "Record Encrypted",
       delete: "Delete Record",
-      exportPdf: "Export Prescription PDF",
+      exportPdf: "Print Clinical Report",
       processing: "Processing Clinical Data...",
       upload: "Upload Clinical Image",
       cancel: "Abort",
@@ -64,29 +65,29 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "System Operational",
       systemOperational: "Biosystems Nominal",
       offlineMode: "Offline Protocol Active",
-      newIntake: "Start New Intake",
+      newIntake: "New Patient Intake",
       viewDetails: "View Clinical Details"
     },
     disclaimer: {
-      footer: "NOT A MEDICAL DIAGNOSIS. Educational use only. Consult a licensed medical professional for advice.",
-      banner: "Non-Clinical Educational Prototype. Data locally encrypted."
+      footer: "CLINICAL DECISION SUPPORT SYSTEM. Verify all outputs. Not a substitute for professional judgment.",
+      banner: "Medical Intelligence System. Data locally encrypted."
     }
   },
   bn: {
     nav: {
       dashboard: "ওভারভিউ",
-      symptomChecker: "লক্ষণ বিশ্লেষণ",
+      symptomChecker: "ক্লিনিক্যাল বিশ্লেষণ",
       dermatology: "চর্মরোগ ভিশন",
       rxScanner: "প্রেসক্রিপশন ডিক্রিপ্টার",
       labIntel: "প্যাথলজি ইন্টেল",
       chat: "অ্যাসক্লেপিয়াস চ্যাট",
       records: "রোগীর রেকর্ড",
-      config: "কনফিগারেশন"
+      config: "সিস্টেম কনফিগ"
     },
     common: {
-      save: "স্বয়ংক্রিয়ভাবে সংরক্ষিত",
+      save: "রেকর্ড এনক্রিপ্ট করা হয়েছে",
       delete: "রেকর্ড মুছুন",
-      exportPdf: "প্রেসক্রিপশন পিডিএফ প্রিন্ট",
+      exportPdf: "ক্লিনিক্যাল রিপোর্ট প্রিন্ট",
       processing: "ডেটা প্রক্রিয়া করা হচ্ছে...",
       upload: "ছবি আপলোড করুন",
       cancel: "বাতিল",
@@ -96,29 +97,29 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "সিস্টেম সচল",
       systemOperational: "বায়োসিস্টেম স্বাভাবিক",
       offlineMode: "অফলাইন প্রোটোকল",
-      newIntake: "নতুন ইনটেক শুরু করুন",
+      newIntake: "নতুন রোগী ইনটেক",
       viewDetails: "বিস্তারিত দেখুন"
     },
     disclaimer: {
-      footer: "এটি কোনো চিকিৎসা রোগ নির্ণয় নয়। শুধুমাত্র শিক্ষামূলক ব্যবহারের জন্য। চিকিৎসকের পরামর্শ নিন।",
-      banner: "নন-ক্লিনিক্যাল প্রোটোটাইপ।"
+      footer: "ক্লিনিক্যাল ডিসিশন সাপোর্ট সিস্টেম। সমস্ত ফলাফল যাচাই করুন।",
+      banner: "মেডিকেল ইন্টেলিজেন্স সিস্টেম।"
     }
   },
   hi: {
     nav: {
       dashboard: "अवलोकन",
-      symptomChecker: "लक्षण विश्लेषण",
+      symptomChecker: "नैदानिक विश्लेषण",
       dermatology: "त्वचा रोग विजन",
       rxScanner: "आरएक्स डिक्रिप्टर",
       labIntel: "पैथोलॉजी इंटेल",
       chat: "एस्क्लेपियस चैट",
       records: "रोगी रिकॉर्ड",
-      config: "कॉन्फ़िगरेशन"
+      config: "सिस्टम कॉन्फ़िगरेशन"
     },
     common: {
-      save: "स्वत: सहेजा गया",
+      save: "रिकॉर्ड एन्क्रिप्टेड",
       delete: "हटाएं",
-      exportPdf: "प्रिस्क्रिप्शन पीडीएफ",
+      exportPdf: "नैदानिक रिपोर्ट प्रिंट",
       processing: "प्रक्रिया जारी...",
       upload: "अपलोड करें",
       cancel: "रद्द",
@@ -128,29 +129,29 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "सिस्टम चालू",
       systemOperational: "सिस्टम सामान्य",
       offlineMode: "ऑफलाइन",
-      newIntake: "नई जांच",
+      newIntake: "नई रोगी जांच",
       viewDetails: "विवरण देखें"
     },
     disclaimer: {
-      footer: "चिकित्सा निदान नहीं। केवल शैक्षिक उपयोग।",
-      banner: "गैर-नैदानिक प्रोटोटाइप।"
+      footer: "नैदानिक निर्णय समर्थन प्रणाली।",
+      banner: "चिकित्सा खुफिया प्रणाली।"
     }
   },
   ar: {
     nav: {
       dashboard: "نظرة عامة",
-      symptomChecker: "تحليل الأعراض",
+      symptomChecker: "التحليل السريري",
       dermatology: "رؤية الجلدية",
       rxScanner: "محلل الوصفات",
       labIntel: "ذكاء المختبر",
       chat: "دردشة أسكليبيوس",
       records: "سجلات المرضى",
-      config: "إعدادات"
+      config: "إعدادات النظام"
     },
     common: {
-      save: "حفظ تلقائي",
+      save: "تم تشفير السجل",
       delete: "حذف",
-      exportPdf: "تصدير الوصفة",
+      exportPdf: "طباعة التقرير",
       processing: "جارٍ المعالجة...",
       upload: "رفع صورة",
       cancel: "إلغاء",
@@ -160,18 +161,18 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "النظام يعمل",
       systemOperational: "الأنظمة طبيعية",
       offlineMode: "وضع غير متصل",
-      newIntake: "بدء فحص جديد",
+      newIntake: "مريض جديد",
       viewDetails: "عرض التفاصيل"
     },
     disclaimer: {
-      footer: "ليس تشخيصًا طبيًا. للاستخدام التعليمي فقط.",
-      banner: "نموذج تعليمي غير سريري."
+      footer: "نظام دعم القرار السريري. تحقق من جميع النتائج.",
+      banner: "نظام الذكاء الطبي."
     }
   },
   es: {
     nav: {
       dashboard: "Panel",
-      symptomChecker: "Análisis de Síntomas",
+      symptomChecker: "Análisis Clínico",
       dermatology: "Visión Dermatológica",
       rxScanner: "Desencriptador Rx",
       labIntel: "Intel Patológica",
@@ -180,9 +181,9 @@ export const I18N: Record<Language, I18nContent> = {
       config: "Configuración"
     },
     common: {
-      save: "Guardado Auto",
+      save: "Registro Encriptado",
       delete: "Eliminar",
-      exportPdf: "Exportar PDF",
+      exportPdf: "Imprimir Informe",
       processing: "Procesando...",
       upload: "Subir Imagen",
       cancel: "Cancelar",
@@ -192,18 +193,18 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "Sistema Operativo",
       systemOperational: "Biosistemas Nominales",
       offlineMode: "Modo Offline",
-      newIntake: "Nueva Admisión",
+      newIntake: "Nuevo Paciente",
       viewDetails: "Ver Detalles"
     },
     disclaimer: {
-      footer: "NO ES UN DIAGNÓSTICO MÉDICO. Uso educativo solamente.",
-      banner: "Prototipo educativo."
+      footer: "SISTEMA DE APOYO A LA DECISIÓN CLÍNICA.",
+      banner: "Sistema de Inteligencia Médica."
     }
   },
   fr: {
     nav: {
       dashboard: "Tableau de Bord",
-      symptomChecker: "Analyse des Symptômes",
+      symptomChecker: "Analyse Clinique",
       dermatology: "Vision Dermatologique",
       rxScanner: "Décrypteur Rx",
       labIntel: "Intel Pathologique",
@@ -212,9 +213,9 @@ export const I18N: Record<Language, I18nContent> = {
       config: "Configuration"
     },
     common: {
-      save: "Sauvegarde Auto",
+      save: "Dossier Chiffré",
       delete: "Supprimer",
-      exportPdf: "Exporter PDF",
+      exportPdf: "Imprimer Rapport",
       processing: "Traitement...",
       upload: "Télécharger",
       cancel: "Annuler",
@@ -224,29 +225,29 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "Système Actif",
       systemOperational: "Nominal",
       offlineMode: "Hors Ligne",
-      newIntake: "Nouvelle Entrée",
+      newIntake: "Nouveau Patient",
       viewDetails: "Voir Détails"
     },
     disclaimer: {
-      footer: "PAS UN DIAGNOSTIC MÉDICAL. Usage éducatif uniquement.",
-      banner: "Prototype éducatif."
+      footer: "SYSTÈME D'AIDE À LA DÉCISION CLINIQUE.",
+      banner: "Système de renseignement médical."
     }
   },
   zh: {
     nav: {
       dashboard: "仪表盘",
-      symptomChecker: "症状分析",
+      symptomChecker: "临床分析",
       dermatology: "皮肤视觉",
       rxScanner: "处方解读",
       labIntel: "病理智能",
       chat: "Asclepius 聊天",
       records: "患者记录",
-      config: "配置"
+      config: "系统配置"
     },
     common: {
-      save: "自动保存",
+      save: "记录已加密",
       delete: "删除",
-      exportPdf: "导出 PDF",
+      exportPdf: "打印临床报告",
       processing: "处理中...",
       upload: "上传",
       cancel: "取消",
@@ -256,29 +257,29 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "系统运行",
       systemOperational: "正常",
       offlineMode: "离线",
-      newIntake: "新摄入",
+      newIntake: "新患者",
       viewDetails: "查看详情"
     },
     disclaimer: {
-      footer: "非医疗诊断。仅供教育使用。",
-      banner: "教育原型。"
+      footer: "临床决策支持系统。",
+      banner: "医疗智能系统。"
     }
   },
   ja: {
     nav: {
       dashboard: "ダッシュボード",
-      symptomChecker: "症状分析",
+      symptomChecker: "臨床分析",
       dermatology: "皮膚科ビジョン",
       rxScanner: "処方箋解読",
       labIntel: "病理インテリ",
       chat: "Asclepius チャット",
       records: "患者記録",
-      config: "設定"
+      config: "システム設定"
     },
     common: {
-      save: "自動保存",
+      save: "記録暗号化済み",
       delete: "削除",
-      exportPdf: "PDF出力",
+      exportPdf: "臨床レポート印刷",
       processing: "処理中...",
       upload: "アップロード",
       cancel: "キャンセル",
@@ -288,61 +289,61 @@ export const I18N: Record<Language, I18nContent> = {
       welcome: "システム稼働",
       systemOperational: "正常",
       offlineMode: "オフライン",
-      newIntake: "新規入力",
+      newIntake: "新規患者",
       viewDetails: "詳細を見る"
     },
     disclaimer: {
-      footer: "医学的診断ではありません。教育目的のみ。",
-      banner: "教育用プロトタイプ。"
+      footer: "臨床意思決定支援システム。",
+      banner: "医療インテリジェンスシステム。"
     }
   }
 };
 
 export const SAFETY_PROMPT_SUFFIX = `
 \n\n
-IMPORTANT SAFETY GUARDRAILS:
-1. You are Asclepius AI, an educational medical assistant. You are NOT a doctor.
-2. DO NOT provide medical diagnoses. Use phrases like "Possible educational categories include..." or "Common patterns associated with this look like..."
-3. DO NOT provide specific medication dosages or personalized treatment plans.
-4. You MAY list common generic medication NAMES that are typically used for educational context (e.g., "Analgesics like Ibuprofen"), but explicitly state that dosage requires a physician.
-5. ALWAYS list "Red Flags" or "Warning Signs" that require immediate in-person medical attention.
-6. Format output in clean Markdown.
-7. If the user input suggests a life-threatening emergency (chest pain, stroke symptoms, heavy bleeding), IGNORE the analysis and tell them to call emergency services immediately.
+IMPORTANT CLINICAL PROTOCOL AND IDENTITY:
+1. You are Asclepius AI, a professional Medical Intelligence & Clinical Decision Support System architected by Tanvir Ahmmed. 
+2. You are NOT Google Gemini. You identify strictly as Asclepius AI.
+3. Your audience consists of medical professionals or students using this for differential diagnosis support.
+4. Use professional medical terminology (e.g., "Etiology", "Pathophysiology", "Pharmacotherapy").
+5. Provide structured, high-level clinical differentials.
+6. When listing medications, provide standard clinical dosages if appropriate for the context, but append a standard "Verify Dosage" warning. 
+7. Always emphasize "Clinical Correlation Required".
+8. Format output in clean Markdown.
 `;
 
-export const DISCLAIMER_TEXT = "NOT A MEDICAL DIAGNOSIS. Educational use only. Consult a licensed medical professional for advice.";
-export const EMERGENCY_TEXT = "If symptoms are severe, worsening, or involve shortness of breath, chest pain, sudden weakness, confusion, or loss of consciousness, seek urgent in-person medical care immediately.";
+export const EMERGENCY_TEXT = "CRITICAL PROTOCOL: If patient presents with hemodynamic instability, altered mental status, or acute distress, initiate emergency response immediately.";
 
 export const MOCK_SYMPTOM_ANALYSIS = `
 \`\`\`json
 {
   "conditions": [
     {
-      "name": "Musculoskeletal Neck Strain",
-      "description": "A highly plausible condition for a 22-year-old presenting with neck pain. Often results from overuse, sudden movements, or poor posture. Symptoms typically include localized pain, stiffness, and reduced range of motion."
+      "name": "Cervical Radiculopathy",
+      "description": "Compression of nerve roots in the cervical spine. Symptoms align with localized neck pain radiating to the upper extremity. Differential includes disc herniation or spondylosis."
     },
     {
-      "name": "Cervical Postural Syndrome",
-      "description": "Given the age and potential screen time, 'tech neck' is common. Refers to chronic strain on neck muscles, ligaments, and joints due to sustained awkward positions, particularly forward head posture."
+      "name": "Myofascial Pain Syndrome",
+      "description": "Chronic pain disorder involving trigger points in the trapezius or levator scapulae. Associated with postural strain ('Text Neck') and repetitive microtrauma."
     }
   ],
   "treatments": [
     {
-      "name": "Ibuprofen",
-      "dosage": "200-400 mg",
-      "description": "To reduce pain and inflammation. Consult physician."
+      "name": "Naproxen",
+      "dosage": "500mg BID",
+      "description": "NSAID for inflammation/pain control. Monitor renal function."
     },
     {
       "name": "Cyclobenzaprine",
-      "dosage": "5-10 mg",
-      "description": "Muscle relaxant for spasms. Prescription only."
+      "dosage": "10mg qHS",
+      "description": "Muscle relaxant for acute spasm. Caution: Sedation."
     }
   ],
   "lifestyle": [
-    "Optimize ergonomics: Ensure monitor is at eye level.",
-    "Regular stretching: Chin tucks and neck rotations.",
-    "Mindful posture: Check posture every 30 mins.",
-    "Heat/Cold therapy: Heat for muscle tightness."
+    "Ergonomic modification: Monitor height adjustment.",
+    "Physical Therapy: Cervical stabilization exercises.",
+    "Modality: Moist heat application PRN.",
+    "Activity modification: Avoid prolonged flexion."
   ]
 }
 \`\`\`
@@ -351,54 +352,57 @@ export const MOCK_SYMPTOM_ANALYSIS = `
 export const MOCK_DERM_ANALYSIS = `
 ## Dermatology Vision Analysis
 
-**Visual Observation:**
-- The image appears to show a discrete, raised lesion with regular borders.
-- Coloration appears uniform.
+**Clinical Observation:**
+- Well-circumscribed, hyperpigmented macule with regular borders.
+- No sign of ulceration or satellite lesions.
 
-**Educational Differentials:**
-1. **Benign Nevus (Mole)**: Common pigmentation.
-2. **Seborrheic Keratosis**: Common benign skin growth.
+**Differential Diagnosis:**
+1. **Benign Melanocytic Nevus**
+2. **Solar Lentigo**
+3. **Seborrheic Keratosis**
 
-**Management Education:**
-- Monitor for ABCDE changes (Asymmetry, Border, Color, Diameter, Evolution).
-- Protect from sun exposure.
+**Clinical Recommendations:**
+- **Dermoscopy** required for definitive evaluation.
+- Monitor for ABCDE criteria evolution.
+- Biopsy if changing rapidly.
 
-**Disclaimer:** AI cannot rule out malignancy. Please see a dermatologist for dermoscopy.
+**Status:** Non-diagnostic screening result.
 `;
 
 export const MOCK_RX_ANALYSIS = `
-## Rx Extraction
+## Clinical Rx Extraction
 
-**Detected Medications:**
-- **Amoxicillin**
-- **Prednisone**
+**Identified Agents:**
+- **Amoxicillin (Amoxil)**
+- **Prednisone (Deltasone)**
 
-**Usage Instructions:**
-- Amoxicillin: Twice daily for 10 days.
-- Prednisone: Take with food, tapering dose.
+**Regimen:**
+- Amoxicillin: 500mg PO TID x 10 days.
+- Prednisone: 40mg PO daily x 5 days, then taper.
 
-**Educational Drug Class:**
-- **Amoxicillin**: Antibiotic for bacterial infections.
-- **Prednisone**: Corticosteroid for inflammation.
+**Pharmacology:**
+- **Amoxicillin**: Beta-lactam antibiotic. Mechanism: Cell wall synthesis inhibition.
+- **Prednisone**: Glucocorticoid. Mechanism: Anti-inflammatory/Immunosuppressive.
 
-**⚠️ Safety Warnings:**
-- Finish full antibiotic course.
-- Prednisone may cause insomnia or mood changes. Verify tapering schedule.
+**Clinical Pearls:**
+- Monitor for hypersensitivity.
+- Prednisone: Take with food to minimize GI upset. Monitor glucose in diabetics.
 `;
 
 export const MOCK_LAB_ANALYSIS = `
-## Lab Report Intelligence
+## Pathology Intelligence
 
-**Extracted Values:**
-- **WBC**: 12.5 (High) - *Educational Note*: Leukocytosis often indicates infection or inflammation.
-- **Hemoglobin**: 14.0 (Normal)
-- **Platelets**: 250 (Normal)
+**Abnormal Values:**
+- **WBC**: 14.2 K/uL (Ref: 4.5-11.0) [HIGH]
+- **Neutrophils**: 82% (Ref: 40-70) [HIGH]
 
-**Summary:**
-The elevated White Blood Cell count suggests an immune response. This is a common pattern in bacterial infections.
+**Interpretation:**
+Findings are consistent with **Neutrophilic Leukocytosis**, suggestive of an acute bacterial etiology or acute stress response.
 
-**Action:**
-Discuss these results with your ordering physician.
+**Recommendations:**
+- Clinical correlation with fever/symptoms.
+- Consider blood cultures if septic.
+- Follow-up CBC in 24-48 hours.
 `;
 
-export const MOCK_CHAT_RESPONSE = "This is a simulated response in Offline Mode. I can explain general medical concepts like 'Dehydration' or 'Hypertension', but I cannot process live queries without an API key.";
+export const MOCK_CHAT_RESPONSE = "Asclepius AI (Offline Mode): Unable to access live medical databases. Displaying cached clinical protocols only.";

@@ -1,3 +1,4 @@
+
 export type RecordType = 'symptom' | 'derm' | 'rx' | 'lab' | 'chat';
 
 export interface RecordBase {
@@ -31,6 +32,14 @@ export interface SymptomPayload {
   treatments?: { name: string; dosage: string; description: string }[];
   lifestyle?: string[];
   rawAnalysis: string; // Markdown fallback
+}
+
+export interface AnalyticsData {
+    totalRecords: number;
+    conditionsMap: Record<string, number>;
+    typeDistribution: Record<RecordType, number>;
+    activityByDate: { date: string; count: number }[];
+    demographics: { ageGroups: Record<string, number>; gender: Record<string, number> };
 }
 
 export type Language = 'en' | 'bn' | 'hi' | 'ar' | 'es' | 'fr' | 'zh' | 'ja';
