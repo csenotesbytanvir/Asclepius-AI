@@ -90,7 +90,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
         {/* Navigation */}
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
           <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mb-2 opacity-60">Diagnostics</div>
-          {/* Dashboard, Symptom, Derm, Rx, Lab (Indices 0-4) */}
           {navItems.slice(0, 5).map((item) => (
             <NavLink
               key={item.to}
@@ -109,7 +108,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
           ))}
           
           <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mt-6 mb-2 opacity-60">Core System</div>
-          {/* Chat, Records (Indices 5-6) */}
           {navItems.slice(5).map((item) => (
             <NavLink
               key={item.to}

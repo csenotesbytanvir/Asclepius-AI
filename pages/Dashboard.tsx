@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Button } from '../components/Shared';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
-import { Activity, ShieldCheck, Stethoscope, Clock, FileText, Microscope, MessageSquare, ScanEye } from 'lucide-react';
+import { Activity, ShieldCheck, Stethoscope, Clock, FileText } from 'lucide-react';
 import { RecordBase } from '../types';
 
 export const Dashboard = () => {
@@ -13,7 +13,8 @@ export const Dashboard = () => {
   const [recentRecords, setRecentRecords] = React.useState<RecordBase[]>([]);
 
   React.useEffect(() => {
-    // Load recent records metadata
+    // Load recent records metadata (mock or real if implemented full fetch in future)
+    // For now we just read from local storage raw if possible or valid
     const loadRecents = () => {
        const keys = Object.keys(localStorage).filter(k => k.startsWith('asclepius_rec_'));
        const recs = keys.map(k => {
@@ -63,30 +64,22 @@ export const Dashboard = () => {
       </div>
 
       <h3 className="text-lg font-semibold text-slate-300 mt-8 mb-4">Quick Actions</h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-         <Button variant="secondary" onClick={() => navigate('/symptoms')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
-            <Stethoscope className="h-8 w-8 text-accent group-hover:scale-110 transition-transform" />
-            <span className="text-xs text-center font-bold">Symptom Checker</span>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+         <Button variant="secondary" onClick={() => navigate('/symptoms')} className="h-24 flex flex-col gap-2">
+            <Stethoscope className="h-6 w-6 text-accent" />
+            <span>Symptom Checker</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/derm')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
-            <ScanEye className="h-8 w-8 text-purple-400 group-hover:scale-110 transition-transform" />
-            <span className="text-xs text-center font-bold">Dermatology AI</span>
+         <Button variant="secondary" onClick={() => navigate('/derm')} className="h-24 flex flex-col gap-2">
+            <Activity className="h-6 w-6 text-purple-400" />
+            <span>Dermatology AI</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/rx')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
-            <FileText className="h-8 w-8 text-green-400 group-hover:scale-110 transition-transform" />
-            <span className="text-xs text-center font-bold">Rx Scanner</span>
+         <Button variant="secondary" onClick={() => navigate('/rx')} className="h-24 flex flex-col gap-2">
+            <FileText className="h-6 w-6 text-green-400" />
+            <span>Rx Scanner</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/lab')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
-            <Microscope className="h-8 w-8 text-pink-400 group-hover:scale-110 transition-transform" />
-            <span className="text-xs text-center font-bold">Lab Intel</span>
-         </Button>
-         <Button variant="secondary" onClick={() => navigate('/chat')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
-            <MessageSquare className="h-8 w-8 text-blue-400 group-hover:scale-110 transition-transform" />
-            <span className="text-xs text-center font-bold">Chat Assistant</span>
-         </Button>
-         <Button variant="secondary" onClick={() => navigate('/records')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
-            <Clock className="h-8 w-8 text-orange-400 group-hover:scale-110 transition-transform" />
-            <span className="text-xs text-center font-bold">History</span>
+         <Button variant="secondary" onClick={() => navigate('/records')} className="h-24 flex flex-col gap-2">
+            <Clock className="h-6 w-6 text-orange-400" />
+            <span>History</span>
          </Button>
       </div>
 
@@ -112,8 +105,8 @@ export const Dashboard = () => {
                         {rec.type === 'symptom' && <Stethoscope size={16} />}
                         {rec.type === 'derm' && <Activity size={16} />}
                         {rec.type === 'rx' && <FileText size={16} />}
-                        {rec.type === 'lab' && <Microscope size={16} />}
-                        {rec.type === 'chat' && <MessageSquare size={16} />}
+                        {rec.type === 'lab' && <FileText size={16} />}
+                        {rec.type === 'chat' && <FileText size={16} />}
                       </div>
                       <div>
                         <p className="font-medium text-slate-200">{rec.title}</p>
