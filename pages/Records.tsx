@@ -1,9 +1,10 @@
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, Button } from '../components/Shared';
 import { cryptoService } from '../services/cryptoService';
 import { RecordBase } from '../types';
-import { Trash2, Search, FileLock, User } from 'lucide-react';
+import { Trash2, Search, FileLock, User, ArrowLeft, SortAsc, SortDesc } from 'lucide-react';
 import clsx from 'clsx';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
@@ -70,14 +71,14 @@ export const Records = () => {
 
   return (
     <div className="max-w-[1600px] mx-auto h-full flex flex-col">
-       <div className="mb-6">
+       <div className={clsx("mb-6", viewRecord ? "hidden md:block" : "block")}>
            <h1 className="text-3xl font-black text-primary tracking-tight">{t.nav.records}</h1>
            <p className="text-textSecondary text-sm">{t.disclaimer.banner}</p>
        </div>
 
-       <div className="flex-1 flex gap-6 min-h-0">
-           {/* Sidebar List */}
-           <div className="w-80 flex flex-col gap-4">
+       <div className="flex-1 flex gap-6 min-h-0 relative">
+           {/* Sidebar List - Hidden on mobile if viewing record */}
+           <div className={clsx("w-full md:w-80 flex flex-col gap-4 transition-all duration-300", viewRecord ? "hidden md:flex" : "flex")}>
                <div className="bg-surface border border-white/5 rounded-xl p-3">
                    <div className="flex items-center gap-2 bg-surfaceHighlight rounded-lg px-3 py-2">
                        <Search size={16} className="text-textSecondary" />
@@ -102,7 +103,7 @@ export const Records = () => {
                    </div>
                </div>
 
-               <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+               <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar pb-20 md:pb-0">
                    {sortedRecords.length === 0 && (
                        <div className="text-center py-8 text-textSecondary text-xs">No records found.</div>
                    )}
@@ -111,7 +112,7 @@ export const Records = () => {
                          key={rec.id}
                          onClick={() => handleSelect(rec)}
                          className={clsx(
-                             "p-4 rounded-xl border cursor-pointer transition-all group",
+                             "p-4 rounded-xl border cursor-pointer transition-all group active:scale-95",
                              viewRecord?.id === rec.id 
                                ? "bg-surfaceHighlight border-primary" 
                                : "bg-surface border-white/5 hover:bg-surfaceHighlight hover:border-white/10"
@@ -133,16 +134,27 @@ export const Records = () => {
                </div>
            </div>
 
-           {/* Detail View */}
-           <div className="flex-1 bg-surface border border-white/5 rounded-3xl p-8 relative overflow-hidden flex flex-col shadow-2xl">
+           {/* Detail View - Hidden on mobile if NOT viewing record */}
+           <div className={clsx(
+               "flex-1 bg-surface border border-white/5 md:rounded-3xl p-6 md:p-8 relative overflow-hidden flex flex-col shadow-2xl absolute md:relative inset-0 z-10 md:z-0",
+               !viewRecord ? "hidden md:flex" : "flex"
+           )}>
                {viewRecord ? (
                    <>
                        <div className="flex justify-between items-start border-b border-textSecondary/20 pb-6 mb-6">
-                           <div>
-                               <h2 className="text-2xl font-bold text-textPrimary">{viewRecord.title}</h2>
-                               <div className="flex items-center gap-4 mt-2">
-                                   <span className="px-2 py-0.5 rounded bg-primary/20 text-primary text-xs font-bold uppercase tracking-widest">{viewRecord.type}</span>
-                                   <span className="text-xs text-textSecondary font-mono">ID: {viewRecord.id.split('-')[0]}</span>
+                           <div className="flex items-start gap-3">
+                               <button 
+                                   onClick={() => setViewRecord(null)}
+                                   className="md:hidden p-2 -ml-2 text-textSecondary hover:text-white"
+                               >
+                                   <ArrowLeft size={24} />
+                               </button>
+                               <div>
+                                   <h2 className="text-xl md:text-2xl font-bold text-textPrimary line-clamp-2">{viewRecord.title}</h2>
+                                   <div className="flex items-center gap-4 mt-2">
+                                       <span className="px-2 py-0.5 rounded bg-primary/20 text-primary text-xs font-bold uppercase tracking-widest">{viewRecord.type}</span>
+                                       <span className="text-xs text-textSecondary font-mono hidden md:inline">ID: {viewRecord.id.split('-')[0]}</span>
+                                   </div>
                                </div>
                            </div>
                            <button 
@@ -153,7 +165,7 @@ export const Records = () => {
                                <Trash2 size={20} />
                            </button>
                        </div>
-                       <div className="flex-1 overflow-y-auto prose prose-invert max-w-none">
+                       <div className="flex-1 overflow-y-auto prose prose-invert max-w-none custom-scrollbar pb-20 md:pb-0">
                            <ReactMarkdown>{decryptedContent || ''}</ReactMarkdown>
                        </div>
                    </>

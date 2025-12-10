@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '../components/Shared';
 
@@ -59,21 +60,23 @@ export const Welcome: React.FC<WelcomeProps> = ({ onStart }) => {
                     </div>
                 </div>
 
-                {/* Action with special animation */}
-                <div className="pt-12 w-full max-w-xs animate-in slide-in-from-bottom-8 duration-1000 delay-500 animate-float-y">
-                    <Button 
-                        onClick={onStart} 
-                        variant="primary" 
-                        size="lg" 
-                        className="w-full h-16 text-lg shadow-[0_0_60px_rgba(6,182,212,0.4)] bg-gradient-to-r from-cyan-500 to-blue-600 hover:to-blue-500 text-white border-none rounded-3xl font-black tracking-widest group relative overflow-hidden"
-                    >
-                        <span className="relative z-10 flex items-center justify-center gap-3">
-                            INITIALIZE
-                            <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
-                        </span>
-                        {/* Shimmer effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    </Button>
+                {/* Action with isolated animation */}
+                <div className="pt-12 w-full max-w-xs animate-in slide-in-from-bottom-8 duration-1000 delay-500 flex flex-col items-center">
+                    <div className="animate-float-y w-full">
+                        <Button 
+                            onClick={onStart} 
+                            variant="primary" 
+                            size="lg" 
+                            className="w-full h-16 text-lg shadow-[0_0_60px_rgba(6,182,212,0.6)] hover:shadow-[0_0_80px_rgba(6,182,212,0.8)] bg-gradient-to-r from-cyan-500 to-blue-600 hover:to-blue-500 text-white border border-white/20 rounded-3xl font-black tracking-widest group relative overflow-hidden transition-all duration-300"
+                        >
+                            <span className="relative z-10 flex items-center justify-center gap-3">
+                                INITIALIZE
+                                <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                            </span>
+                            {/* Shimmer effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                        </Button>
+                    </div>
                     <p className="text-[9px] text-textSecondary text-center mt-6 font-mono opacity-60">
                         Architected by Team Curadex • CONFIG v1.0
                     </p>
