@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Asclepius AI - Medical Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              background: 'var(--bg-app)',
+              surface: 'var(--bg-surface)',
+              surfaceHighlight: 'var(--bg-highlight)',
+              primary: 'var(--color-primary)',
+              secondary: 'var(--color-secondary)',
+              accent: 'var(--color-accent)',
+              textPrimary: 'var(--text-primary)',
+              textSecondary: 'var(--text-secondary)',
+              success: '#10B981',
+              warning: '#F59E0B',
+              danger: '#EF4444',
+            },
+            boxShadow: {
+              'glow': 'var(--shadow-glow)',
+              'glow-accent': 'var(--shadow-accent)',
+              'glow-heavy': '0 0 50px rgba(59, 130, 246, 0.5)',
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'float-y': 'floatY 4s ease-in-out infinite',
+              'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'aurora': 'aurora 20s linear infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              floatY: {
+                '0%, 100%': { transform: 'translateY(0)', boxShadow: '0 10px 40px -10px rgba(59,130,246,0.5)' },
+                '50%': { transform: 'translateY(-15px)', boxShadow: '0 25px 60px -12px rgba(6,182,212,0.6)' },
+              },
+              pulseGlow: {
+                '0%, 100%': { opacity: 1 },
+                '50%': { opacity: .7 },
+              },
+              aurora: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '50%': { backgroundPosition: '100% 50%' },
+                '100%': { backgroundPosition: '0% 50%' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        /* Default (Nebula) */
+        --bg-app: #05050A;
+        --bg-surface: #0F1218;
+        --bg-highlight: #1A1E29;
+        --color-primary: #3B82F6;
+        --color-secondary: #8B5CF6;
+        --color-accent: #06B6D4;
+        --text-primary: #F8FAFC;
+        --text-secondary: #94A3B8;
+        --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
+        --shadow-accent: 0 0 20px rgba(6, 182, 212, 0.15);
+      }
+
+      .theme-clinical {
+        --bg-app: #F0F4F8;
+        --bg-surface: #FFFFFF;
+        --bg-highlight: #E2E8F0;
+        --color-primary: #0284C7; /* Sky 600 */
+        --color-secondary: #4F46E5; /* Indigo 600 */
+        --color-accent: #0D9488; /* Teal 600 */
+        --text-primary: #0F172A;
+        --text-secondary: #475569;
+        --shadow-glow: 0 4px 15px -1px rgba(2, 132, 199, 0.3);
+        --shadow-accent: 0 4px 15px -1px rgba(13, 148, 136, 0.3);
+      }
+
+      .theme-onyx {
+        --bg-app: #000000;
+        --bg-surface: #0A0A0A;
+        --bg-highlight: #171717;
+        --color-primary: #FFFFFF;
+        --color-secondary: #737373;
+        --color-accent: #404040;
+        --text-primary: #EDEDED;
+        --text-secondary: #A0A0A0;
+        --shadow-glow: 0 0 25px rgba(255, 255, 255, 0.15);
+        --shadow-accent: 0 0 25px rgba(255, 255, 255, 0.15);
+      }
+
+      body {
+        background-color: var(--bg-app);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        transition: background-color 0.5s ease, color 0.5s ease;
+      }
+      
+      /* Global Animated Background Layer */
+      .aurora-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #0f172a);
+        background-size: 400% 400%;
+        animation: aurora 20s ease infinite;
+        opacity: 0.8;
+      }
+
+      .theme-clinical .aurora-bg {
+         background: linear-gradient(-45deg, #f0f9ff, #e0f2fe, #dbeafe, #f0f9ff);
+         opacity: 1;
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--bg-highlight); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+      
+      /* Transparency Utilities */
+      .glass-panel {
+        background: rgba(15, 18, 24, 0.6);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .theme-clinical .glass-panel {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      /* Prescription Print Layout */
+      @media print {
+        @page { margin: 0; size: A4 portrait; }
+        body {
+          background-color: white !important;
+          color: black !important;
+          overflow: visible !important;
+          height: auto !important;
+        }
+        .no-print { display: none !important; }
+        .print-only { display: block !important; }
+        .aurora-bg { display: none !important; }
+        
+        #root, main, .max-w-6xl { 
+          width: 100% !important; 
+          max-width: none !important; 
+          margin: 0 !important; 
+          padding: 0 !important;
+          height: auto !important;
+          overflow: visible !important;
+          position: static !important;
+        }
+
+        .print-section {
+          background: white !important;
+          border: none !important;
+          box-shadow: none !important;
+          color: black !important;
+          padding: 1cm !important;
+          width: 100% !important;
+          position: static !important;
+        }
+
+        h1, h2, h3, h4, p, span, div, strong {
+          color: black !important;
+          text-shadow: none !important;
+        }
+        
+        .print-header {
+            border-bottom: 2px solid #000 !important;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.32.0",
+    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.10.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.557.0",
+    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
+    "react-hook-form": "https://aistudiocdn.com/react-hook-form@^7.68.0",
+    "clsx": "https://aistudiocdn.com/clsx@^2.1.1"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

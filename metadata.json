@@ -1,0 +1,7 @@
+{
+  "name": "Asclepius AI",
+  "description": "A non-clinical, educational medical intelligence web application. Provides general health information, symptom analysis, and record keeping with local encryption.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
