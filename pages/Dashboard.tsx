@@ -63,30 +63,30 @@ export const Dashboard = () => {
       </div>
 
       <h3 className="text-lg font-semibold text-slate-300 mt-8 mb-4">Quick Actions</h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-         <Button variant="secondary" onClick={() => navigate('/symptoms')} className="h-24 flex flex-col gap-2 p-2">
-            <Stethoscope className="h-6 w-6 text-accent" />
-            <span className="text-xs text-center">Symptom Checker</span>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+         <Button variant="secondary" onClick={() => navigate('/symptoms')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
+            <Stethoscope className="h-8 w-8 text-accent group-hover:scale-110 transition-transform" />
+            <span className="text-xs text-center font-bold">Symptom Checker</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/derm')} className="h-24 flex flex-col gap-2 p-2">
-            <ScanEye className="h-6 w-6 text-purple-400" />
-            <span className="text-xs text-center">Dermatology AI</span>
+         <Button variant="secondary" onClick={() => navigate('/derm')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
+            <ScanEye className="h-8 w-8 text-purple-400 group-hover:scale-110 transition-transform" />
+            <span className="text-xs text-center font-bold">Dermatology AI</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/rx')} className="h-24 flex flex-col gap-2 p-2">
-            <FileText className="h-6 w-6 text-green-400" />
-            <span className="text-xs text-center">Rx Scanner</span>
+         <Button variant="secondary" onClick={() => navigate('/rx')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
+            <FileText className="h-8 w-8 text-green-400 group-hover:scale-110 transition-transform" />
+            <span className="text-xs text-center font-bold">Rx Scanner</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/lab')} className="h-24 flex flex-col gap-2 p-2">
-            <Microscope className="h-6 w-6 text-pink-400" />
-            <span className="text-xs text-center">Lab Intel</span>
+         <Button variant="secondary" onClick={() => navigate('/lab')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
+            <Microscope className="h-8 w-8 text-pink-400 group-hover:scale-110 transition-transform" />
+            <span className="text-xs text-center font-bold">Lab Intel</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/chat')} className="h-24 flex flex-col gap-2 p-2">
-            <MessageSquare className="h-6 w-6 text-blue-400" />
-            <span className="text-xs text-center">Chat Assistant</span>
+         <Button variant="secondary" onClick={() => navigate('/chat')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
+            <MessageSquare className="h-8 w-8 text-blue-400 group-hover:scale-110 transition-transform" />
+            <span className="text-xs text-center font-bold">Chat Assistant</span>
          </Button>
-         <Button variant="secondary" onClick={() => navigate('/records')} className="h-24 flex flex-col gap-2 p-2">
-            <Clock className="h-6 w-6 text-orange-400" />
-            <span className="text-xs text-center">History</span>
+         <Button variant="secondary" onClick={() => navigate('/records')} className="h-28 flex flex-col items-center justify-center gap-2 p-2 group">
+            <Clock className="h-8 w-8 text-orange-400 group-hover:scale-110 transition-transform" />
+            <span className="text-xs text-center font-bold">History</span>
          </Button>
       </div>
 
