@@ -92,7 +92,12 @@ export const generateMultimodalAnalysis = async (
   }
 };
 
-export const generateChatResponse = async (history: { role: string; parts: { text: string }[] }[], newMessage: string, language: string = 'en') => {
+export const generateChatResponse = async (
+    history: { role: string; parts: { text?: string, inlineData?: any }[] }[], 
+    newMessage: string, 
+    language: string = 'en',
+    image?: string // Base64 optional
+) => {
     if (isOfflineMode) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         return MOCK_CHAT_RESPONSE;
@@ -102,22 +107,60 @@ export const generateChatResponse = async (history: { role: string; parts: { tex
 
     try {
         const langLabel = getLanguageLabel(language);
+        const systemPrompt = `You are Asclepius AI, an advanced medical intelligence system architected by Tanvir Ahmmed.
+        
+        Identity & Core Directives:
+        1. Identify strictly as "Asclepius AI".
+        2. Your primary goal is to assist medical professionals and students.
+        3. Respond in ${langLabel}.
+        
+        Behavioral Protocols:
+        - Be helpful, conversational, and highly intelligent.
+        - You CAN provide detailed medical explanations, differentials, pharmacology, and physiology.
+        - You CAN analyze medical images if provided (X-Rays, Dermatology, Reports).
+        - Structure your answers with Markdown.
+        
+        Safety Limits:
+        - Do NOT provide definitive diagnoses for real-world individuals.
+        - ALWAYS suggest clinical correlation.
+        `;
+
+        // If image is provided in this turn, we must use a model capable of vision (Gemini 2.5 Flash supports it).
+        // We construct the chat with history + new message.
+        // Google GenAI SDK Chat manages history internally, but we can pass initial history.
+        // For vision in chat, we might need to send the image part in `sendMessage`.
+
         const chat = aiInstance.chats.create({
             model: 'gemini-2.5-flash',
             history: [
                 {
                     role: 'user',
-                    parts: [{ text: `System Instruction: You are Asclepius AI. Respond entirely in ${langLabel} language. ` + SAFETY_PROMPT_SUFFIX }]
+                    parts: [{ text: systemPrompt }]
                 },
                 {
                     role: 'model',
-                    parts: [{ text: "Understood. I am Asclepius AI, an educational medical assistant. I will not diagnose, prescribe, or provide personalized advice. I will always include safety warnings." }]
+                    parts: [{ text: `Understood. I am Asclepius AI. I am ready to assist with high-level clinical reasoning and medical information in ${langLabel}.` }]
                 },
                 ...history
             ]
         });
 
-        const result = await chat.sendMessage({ message: newMessage });
+        let parts: any[] = [{ text: newMessage }];
+        
+        if (image) {
+            const cleanBase64 = image.replace(/^data:(.*,)?/, '');
+            parts = [
+                {
+                    inlineData: {
+                        mimeType: 'image/jpeg', // Assuming jpeg for simplicity, or detect from string
+                        data: cleanBase64
+                    }
+                },
+                { text: newMessage }
+            ];
+        }
+
+        const result = await chat.sendMessage(parts);
         return result.text;
     } catch (error) {
         console.error("Gemini Chat Error", error);

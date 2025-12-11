@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
@@ -11,7 +12,11 @@ import {
   Menu,
   X,
   Languages,
-  Settings
+  Settings,
+  Pill,
+  HeartPulse,
+  BookOpen,
+  Calculator
 } from 'lucide-react';
 import { I18N } from '../constants';
 import { useLanguage } from '../App';
@@ -30,15 +35,61 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
   const t = I18N[language].nav;
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
-  const navItems = [
+  // Grouped Navigation for better organization
+  const diagnosticItems = [
     { to: '/', icon: LayoutDashboard, label: t.dashboard },
     { to: '/symptoms', icon: Stethoscope, label: t.symptomChecker },
     { to: '/derm', icon: ScanEye, label: t.dermatology },
-    { to: '/rx', icon: FileText, label: t.rxScanner },
     { to: '/lab', icon: Microscope, label: t.labIntel },
+  ];
+
+  const medicationItems = [
+    { to: '/rx', icon: FileText, label: t.rxScanner },
+    { to: '/pharmacology', icon: Pill, label: t.pharmacology },
+    { to: '/calculators', icon: Calculator, label: t.calculators },
+  ];
+
+  const careItems = [
+    { to: '/wellness', icon: HeartPulse, label: t.wellness },
+    { to: '/library', icon: BookOpen, label: t.library },
     { to: '/chat', icon: MessageSquare, label: t.chat },
     { to: '/records', icon: FolderLock, label: t.records },
   ];
+
+  const NavGroup = ({ title, items }: { title: string, items: any[] }) => (
+    <>
+      <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mt-6 mb-2 opacity-60">{title}</div>
+      {items.map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          onClick={() => setSidebarOpen(false)}
+          className={({ isActive }) => clsx(
+            "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
+            isActive 
+              ? "bg-gradient-to-r from-primary/20 to-transparent border-l-2 border-primary shadow-glow translate-x-1" 
+              : "text-textSecondary hover:bg-black/5 dark:hover:bg-white/5 hover:text-textPrimary hover:translate-x-1"
+          )}
+        >
+          {({ isActive }) => (
+             <>
+                <item.icon className={clsx(
+                    "h-5 w-5 transition-colors", 
+                    isActive ? "text-primary drop-shadow-[0_0_5px_currentColor]" : "text-textSecondary group-hover:text-primary"
+                )} />
+                <span className={clsx(
+                    "font-medium text-sm relative z-10 transition-colors",
+                    // Ensure text is dark in light mode when active
+                    isActive ? "text-primary font-bold" : "text-textSecondary group-hover:text-textPrimary"
+                )}>
+                    {item.label}
+                </span>
+             </>
+          )}
+        </NavLink>
+      ))}
+    </>
+  );
 
   return (
     <div className="h-[100dvh] bg-background text-textPrimary flex overflow-hidden print:bg-white print:text-black print:h-auto relative">
@@ -46,33 +97,31 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
       <div className="aurora-bg"></div>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-surface/90 backdrop-blur-xl border-b border-surfaceHighlight no-print">
-        <div className="flex items-center gap-2">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-surface/90 backdrop-blur-xl border-b border-surfaceHighlight no-print shadow-lg h-[60px]">
+        <div className="flex items-center gap-3">
           {/* Mobile Logo */}
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-glow">
-               <AsclepiusLogo className="text-white w-5 h-5" />
+          <div className="w-8 h-8 flex items-center justify-center">
+               <AsclepiusLogo className="w-8 h-8 text-primary" />
           </div>
-          <span className="font-black text-lg tracking-wider font-sans">ASCLEPIUS</span>
+          <span className="font-black text-lg tracking-wider font-sans bg-clip-text text-transparent bg-gradient-to-r from-primary to-white">ASCLEPIUS</span>
         </div>
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-textSecondary hover:text-textPrimary">
-          {sidebarOpen ? <X /> : <Menu />}
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-textSecondary hover:text-textPrimary bg-surfaceHighlight/50 rounded-lg">
+          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {/* Sidebar */}
       <aside className={clsx(
-        "fixed md:relative z-40 h-full w-72 bg-surface/80 backdrop-blur-xl border-r border-surfaceHighlight flex flex-col transition-transform duration-300 no-print shadow-2xl md:shadow-none",
+        "fixed md:relative z-40 h-full w-72 bg-surface/80 backdrop-blur-xl border-r border-surfaceHighlight flex flex-col transition-transform duration-300 no-print shadow-2xl md:shadow-none pt-[60px] md:pt-0",
         sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       )}>
         {/* Brand Header */}
-        <div className="p-8 pb-4">
+        <div className="p-8 pb-4 hidden md:block">
           <div className="flex items-center gap-4 mb-2">
              <div className="relative w-12 h-12 flex items-center justify-center">
                  <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary opacity-40 blur-xl rounded-full animate-pulse"></div>
                  {/* Standardized Logo */}
-                 <div className="relative bg-surfaceHighlight/50 border border-white/10 rounded-xl p-1 shadow-glow flex items-center justify-center overflow-hidden w-full h-full">
-                     <AsclepiusLogo className="w-8 h-8 text-primary" />
-                 </div>
+                 <AsclepiusLogo className="w-12 h-12 text-primary drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
              </div>
              <div>
                 <h1 className="font-black text-xl tracking-tighter text-textPrimary">ASCLEPIUS</h1>
@@ -90,40 +139,37 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
         {/* Navigation */}
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
           <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mb-2 opacity-60">Diagnostics</div>
-          {navItems.slice(0, 5).map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) => clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
-                isActive 
-                  ? "bg-gradient-to-r from-primary/20 to-transparent text-white border-l-2 border-primary shadow-glow translate-x-1" 
-                  : "text-textSecondary hover:bg-white/5 hover:text-white hover:translate-x-1"
-              )}
-            >
-              <item.icon className={clsx("h-5 w-5 transition-colors", ({isActive}: any) => isActive ? "text-primary drop-shadow-[0_0_5px_rgba(59,130,246,0.5)]" : "text-textSecondary group-hover:text-white")} />
-              <span className="font-medium text-sm relative z-10">{item.label}</span>
-            </NavLink>
+          {diagnosticItems.map((item) => (
+             <NavLink
+             key={item.to}
+             to={item.to}
+             onClick={() => setSidebarOpen(false)}
+             className={({ isActive }) => clsx(
+               "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
+               isActive 
+                 ? "bg-gradient-to-r from-primary/20 to-transparent border-l-2 border-primary shadow-glow translate-x-1" 
+                 : "text-textSecondary hover:bg-black/5 dark:hover:bg-white/5 hover:text-textPrimary hover:translate-x-1"
+             )}
+           >
+             {({ isActive }) => (
+                <>
+                   <item.icon className={clsx(
+                       "h-5 w-5 transition-colors", 
+                       isActive ? "text-primary drop-shadow-[0_0_5px_currentColor]" : "text-textSecondary group-hover:text-primary"
+                   )} />
+                   <span className={clsx(
+                       "font-medium text-sm relative z-10 transition-colors",
+                       isActive ? "text-primary font-bold" : "text-textSecondary group-hover:text-textPrimary"
+                   )}>
+                       {item.label}
+                   </span>
+                </>
+             )}
+           </NavLink>
           ))}
           
-          <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mt-6 mb-2 opacity-60">Core System</div>
-          {navItems.slice(5).map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) => clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
-                isActive 
-                  ? "bg-gradient-to-r from-secondary/20 to-transparent text-white border-l-2 border-secondary shadow-glow translate-x-1" 
-                  : "text-textSecondary hover:bg-white/5 hover:text-white hover:translate-x-1"
-              )}
-            >
-              <item.icon className={clsx("h-5 w-5 transition-colors", ({isActive}: any) => isActive ? "text-secondary drop-shadow-[0_0_5px_rgba(139,92,246,0.5)]" : "text-textSecondary group-hover:text-white")} />
-              <span className="font-medium text-sm relative z-10">{item.label}</span>
-            </NavLink>
-          ))}
+          <NavGroup title="Pharmacology & Tools" items={medicationItems} />
+          <NavGroup title="Patient Care" items={careItems} />
         </nav>
 
         {/* Settings Footer in Sidebar */}
@@ -135,16 +181,17 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
             <select 
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as Language)}
-                className="w-full bg-surface/50 border border-white/10 rounded-lg p-2 text-xs text-textSecondary focus:border-primary outline-none hover:text-white transition-colors cursor-pointer"
+                className="w-full bg-surface border border-border rounded-lg p-2 text-xs text-textPrimary focus:border-primary outline-none hover:border-primary transition-colors cursor-pointer"
             >
                 {LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>{lang.label}</option>
+                    <option key={lang.code} value={lang.code} className="bg-surface text-textPrimary">{lang.label}</option>
                 ))}
             </select>
           
           <button 
+            type="button"
             onClick={onConfig}
-            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-textSecondary hover:bg-white/5 hover:text-white transition-all group mt-2"
+            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-textSecondary hover:bg-black/5 dark:hover:bg-white/5 hover:text-textPrimary transition-all group mt-2"
           >
             <Settings className="h-5 w-5 group-hover:rotate-90 transition-transform duration-500" />
             <div className="text-left">
@@ -155,14 +202,16 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full relative overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 md:pt-12 scroll-smooth pb-32 custom-scrollbar">
-           {children}
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col h-full relative overflow-hidden pt-[60px] md:pt-0">
+        <div className="flex-1 overflow-y-auto scroll-smooth custom-scrollbar flex flex-col">
+           <div className="flex-1 p-4 md:p-8 md:pt-12 pb-12 w-full max-w-[1600px] mx-auto">
+               {children}
+           </div>
+           
+           {/* Static Footer within flow */}
+           <AppFooter disclaimer={I18N[language].disclaimer.footer} />
         </div>
-        
-        {/* Persistent App Footer */}
-        <AppFooter disclaimer={I18N[language].disclaimer.footer} />
       </main>
 
       {/* Mobile Sidebar Overlay */}

@@ -1,14 +1,16 @@
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Card, Button, FileUpload, DisclaimerBox } from '../components/Shared';
+import { Card, Button, FileUpload, DisclaimerBox, PageHeader } from '../components/Shared';
 import { generateMultimodalAnalysis } from '../services/geminiService';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
-import { Save, Printer, ScanEye, UploadCloud } from 'lucide-react';
+import { Save, Printer, ScanEye, UploadCloud, RefreshCcw } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 export const Dermatology = () => {
   const { language } = useLanguage();
+  const t = I18N[language];
   const [image, setImage] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -37,15 +39,30 @@ export const Dermatology = () => {
     }
   };
 
+  const reset = () => {
+      setImage(null);
+      setResult(null);
+  };
+
+  const guideContent = `
+**Dermatology Vision Protocol**
+
+1.  **Image Capture**: Ensure good lighting and focus.
+2.  **Upload**: Select 'Upload Image' to import the lesion photo.
+3.  **Analysis**: The system analyzes visual features (Asymmetry, Border, Color, Diameter).
+4.  **Results**: Provides a differential diagnosis list and management suggestions.
+
+*Disclaimer: This is a screening tool, not a diagnostic device. Biopsy is the gold standard.*
+  `;
+
   return (
     <div className="max-w-[1600px] mx-auto space-y-6 h-full flex flex-col">
-       <div className="flex items-center justify-between no-print shrink-0">
-         <div>
-            <h1 className="text-3xl font-black text-white tracking-tight flex items-center gap-2">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">Dermatology</span> Vision
-            </h1>
-            <p className="text-textSecondary text-sm">Visual analysis for skin conditions and injuries.</p>
-         </div>
+       <div className="shrink-0 no-print">
+         <PageHeader 
+            title={<span><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">Dermatology</span> Vision</span>}
+            subtitle={t.dermatology.subtitle}
+            guide={guideContent}
+         />
       </div>
 
       <div className="flex-1 grid md:grid-cols-2 gap-8 min-h-0">
@@ -57,7 +74,7 @@ export const Dermatology = () => {
                        <div className="w-24 h-24 bg-surfaceHighlight/50 rounded-full flex items-center justify-center mb-6 shadow-glow transition-transform group-hover:scale-110">
                            <UploadCloud className="text-pink-500 h-10 w-10" />
                        </div>
-                       <h3 className="text-xl font-bold text-white mb-2">Upload Image</h3>
+                       <h3 className="text-xl font-bold text-textPrimary mb-2">{t.dermatology.uploadText}</h3>
                        <div className="absolute inset-0 opacity-0">
                            <FileUpload label="" accept="image/*" onFileSelect={handleFile} />
                        </div>
@@ -65,8 +82,10 @@ export const Dermatology = () => {
                ) : (
                    <div className="relative h-full w-full rounded-2xl overflow-hidden bg-black">
                        <img src={image} className="w-full h-full object-contain" />
-                       <div className="absolute top-4 right-4">
-                           <Button variant="secondary" size="sm" onClick={() => {setImage(null); setResult(null);}}>Remove</Button>
+                       <div className="absolute top-4 right-4 z-10">
+                           <Button variant="secondary" size="sm" onClick={reset}>
+                               <RefreshCcw size={14} className="mr-2" /> {t.common.reset}
+                           </Button>
                        </div>
                    </div>
                )}
@@ -76,23 +95,23 @@ export const Dermatology = () => {
              onClick={analyze} 
              disabled={!image} 
              isLoading={loading}
-             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-surfaceHighlight border border-white/10 hover:bg-white/5 shadow-lg"
+             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-surfaceHighlight border border-white/10 hover:bg-white/5 shadow-lg text-textPrimary"
            >
-             <ScanEye className="mr-2" /> Run Diagnostics
+             <ScanEye className="mr-2" /> {t.common.submit}
            </Button>
         </div>
 
         {/* Right Panel: Results */}
-        <div className="bg-[#080a0e]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-8 flex flex-col h-full min-h-[500px] relative overflow-hidden shadow-inner">
+        <div className="bg-surfaceHighlight/50 backdrop-blur-xl border border-white/5 rounded-3xl p-8 flex flex-col h-full min-h-[500px] relative overflow-hidden shadow-inner">
             {!result ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center opacity-30">
-                    <div className="w-32 h-24 border-2 border-dashed border-white/20 rounded-xl mb-4 flex items-center justify-center">
-                        <div className="w-10 h-10 bg-white/10 rounded-full"></div>
+                    <div className="w-32 h-24 border-2 border-dashed border-textSecondary rounded-xl mb-4 flex items-center justify-center">
+                        <div className="w-10 h-10 bg-textSecondary rounded-full"></div>
                     </div>
-                    <h3 className="text-lg font-bold text-white tracking-widest uppercase">Awaiting Input</h3>
+                    <h3 className="text-lg font-bold text-textPrimary tracking-widest uppercase">{t.dermatology.awaiting}</h3>
                 </div>
             ) : (
-                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none">
+                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none prose-headings:text-textPrimary prose-p:text-textSecondary">
                     <ReactMarkdown>{result}</ReactMarkdown>
                 </div>
             )}

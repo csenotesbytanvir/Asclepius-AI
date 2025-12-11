@@ -1,13 +1,15 @@
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Card, Button, FileUpload, DisclaimerBox } from '../components/Shared';
+import { Card, Button, FileUpload, DisclaimerBox, PageHeader } from '../components/Shared';
 import { generateMultimodalAnalysis } from '../services/geminiService';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
-import { Microscope, BarChart3 } from 'lucide-react';
+import { Microscope, BarChart3, RefreshCcw } from 'lucide-react';
 
 export const LabIntelligence = () => {
   const { language } = useLanguage();
+  const t = I18N[language];
   const [image, setImage] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -32,15 +34,22 @@ export const LabIntelligence = () => {
     }
   };
 
+  const guideContent = `
+**Pathology Intelligence Protocol**
+
+1.  **Input**: Upload a photo of a Blood Work, Urinalysis, or Histopathology report.
+2.  **Processing**: The AI parses values, flags abnormalities (High/Low), and correlates findings.
+3.  **Output**: Provides a summary of findings and potential clinical significance.
+  `;
+
   return (
     <div className="max-w-[1600px] mx-auto space-y-6 h-full flex flex-col">
-       <div className="flex items-center justify-between no-print shrink-0">
-         <div>
-            <h1 className="text-3xl font-black text-white tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-secondary to-purple-400">
-               Lab Intelligence
-            </h1>
-            <p className="text-textSecondary text-sm">Deep analysis of pathology and blood work reports.</p>
-         </div>
+       <div className="shrink-0 no-print">
+         <PageHeader 
+            title={<span><span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-purple-400">Lab</span> Intelligence</span>}
+            subtitle={t.lab.subtitle}
+            guide={guideContent}
+         />
       </div>
 
       <div className="flex-1 grid md:grid-cols-2 gap-8 min-h-0">
@@ -51,7 +60,7 @@ export const LabIntelligence = () => {
                        <div className="mb-6">
                            <BarChart3 className="text-secondary h-16 w-16" />
                        </div>
-                       <Button variant="secondary" className="pointer-events-none">Select File</Button>
+                       <Button variant="secondary" className="pointer-events-none">{t.lab.uploadText}</Button>
                        <div className="absolute inset-0 opacity-0">
                            <FileUpload label="" accept="image/*" onFileSelect={handleFile} />
                        </div>
@@ -60,7 +69,9 @@ export const LabIntelligence = () => {
                    <div className="relative h-full w-full rounded-2xl overflow-hidden bg-black">
                        <img src={image} className="w-full h-full object-contain" />
                        <div className="absolute top-4 right-4">
-                           <Button variant="secondary" size="sm" onClick={() => {setImage(null); setResult(null);}}>Reset</Button>
+                           <Button variant="secondary" size="sm" onClick={() => {setImage(null); setResult(null);}}>
+                               <RefreshCcw size={14} className="mr-2" /> {t.common.reset}
+                           </Button>
                        </div>
                    </div>
                )}
@@ -70,9 +81,9 @@ export const LabIntelligence = () => {
              onClick={analyze} 
              disabled={!image} 
              isLoading={loading}
-             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-gradient-to-r from-secondary to-purple-800 border border-white/10 shadow-lg"
+             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-gradient-to-r from-secondary to-purple-800 border border-white/10 shadow-lg text-white"
            >
-             Analyze Report
+             {t.common.submit}
            </Button>
         </div>
 
@@ -80,10 +91,10 @@ export const LabIntelligence = () => {
             {!result ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center opacity-30">
                     <Microscope size={64} className="mb-4 text-textSecondary" />
-                    <h3 className="text-lg font-bold text-white tracking-widest uppercase">No Data Found</h3>
+                    <h3 className="text-lg font-bold text-textPrimary tracking-widest uppercase">{t.lab.awaiting}</h3>
                 </div>
             ) : (
-                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none">
+                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none prose-headings:text-textPrimary prose-p:text-textSecondary">
                     <ReactMarkdown>{result}</ReactMarkdown>
                 </div>
             )}

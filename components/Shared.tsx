@@ -1,7 +1,8 @@
 
-import React from 'react';
-import { Loader2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Loader2, Mic, X, HelpCircle, Info } from 'lucide-react';
 import clsx from 'clsx';
+import ReactMarkdown from 'react-markdown';
 
 export const AsclepiusLogo = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 200 200" className={clsx("drop-shadow-lg", className)} fill="none">
@@ -11,18 +12,12 @@ export const AsclepiusLogo = ({ className }: { className?: string }) => (
               <stop offset="100%" stopColor="var(--color-accent)" />
           </linearGradient>
       </defs>
-      {/* Strand 1 */}
       <path d="M60,20 Q100,60 60,100 T60,180" stroke="url(#dnaGradient)" strokeWidth="12" strokeLinecap="round" opacity="0.9" />
-      {/* Strand 2 */}
       <path d="M140,20 Q100,60 140,100 T140,180" stroke="var(--color-secondary)" strokeWidth="12" strokeLinecap="round" opacity="0.9" />
-      
-      {/* Base Pairs */}
       <line x1="70" y1="30" x2="130" y2="30" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
       <line x1="85" y1="50" x2="115" y2="50" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
       <line x1="85" y1="150" x2="115" y2="150" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
       <line x1="70" y1="170" x2="130" y2="170" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
-
-      {/* Nodes */}
       <circle cx="100" cy="60" r="8" fill="white" className="animate-pulse" />
       <circle cx="100" cy="140" r="8" fill="white" className="animate-pulse" style={{animationDelay: '1s'}} />
   </svg>
@@ -36,19 +31,18 @@ export const RxBadge = ({ className }: { className?: string }) => (
 );
 
 export const AppFooter = ({ disclaimer }: { disclaimer: string }) => (
-  <footer className="py-6 bg-surface/90 border-t border-surfaceHighlight text-center z-10 no-print backdrop-blur-xl absolute bottom-0 w-full">
+  <footer className="py-6 text-center z-10 no-print w-full">
     <div className="container mx-auto px-4 flex flex-col items-center gap-3">
-       <div className="flex items-center gap-2 mb-1 opacity-70">
+       <div className="flex items-center gap-2 opacity-80 hover:opacity-100 transition-opacity">
           <AsclepiusLogo className="w-5 h-5" />
           <span className="text-xs font-black tracking-widest text-textPrimary">ASCLEPIUS AI</span>
        </div>
-       <p className="text-[10px] text-textSecondary font-bold tracking-[0.1em] uppercase flex items-center justify-center gap-2 max-w-xl text-center leading-relaxed">
-         <span className="w-1.5 h-1.5 bg-accent/50 rounded-full animate-pulse shrink-0"></span>
+       <p className="text-[10px] text-textSecondary font-bold tracking-[0.1em] uppercase flex flex-col md:flex-row items-center justify-center gap-2 max-w-xl text-center leading-relaxed">
          {disclaimer}
        </p>
-       <div className="h-px w-24 bg-white/5 my-1"></div>
-       <p className="text-[9px] text-textSecondary font-mono opacity-50 uppercase tracking-wider">
-          © 2025 Asclepius AI • Architected by Tanvir Ahmmed • Version 2.0
+       <div className="h-px w-24 bg-border my-1"></div>
+       <p className="text-[10px] text-textSecondary font-mono opacity-60 uppercase tracking-wider">
+          © 2025 • Architected by Tanvir Ahmmed
        </p>
     </div>
   </footer>
@@ -62,7 +56,7 @@ export interface CardProps {
 }
 
 export const Card = ({ children, className, title, action }: CardProps) => (
-  <div className={clsx("bg-surface/80 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-xl hover:border-white/10 transition-all duration-300", className)}>
+  <div className={clsx("bg-surface/80 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl hover:border-primary/20 transition-all duration-300", className)}>
     {(title || action) && (
       <div className="flex justify-between items-start mb-6">
         {title && <h3 className="text-lg font-bold text-textPrimary tracking-tight">{title}</h3>}
@@ -85,7 +79,7 @@ export const Button = ({
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'accent',
   size?: 'default' | 'sm' | 'lg' | 'icon'
 }) => {
-  const baseStyles = "inline-flex items-center justify-center rounded-xl font-bold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#05050A] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95";
+  const baseStyles = "inline-flex items-center justify-center rounded-xl font-bold tracking-wide transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#05050A] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transform cursor-pointer select-none";
   
   const sizeStyles = {
     default: "px-6 py-3 text-sm",
@@ -95,61 +89,110 @@ export const Button = ({
   };
 
   const variants = {
-    primary: "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-glow hover:shadow-glow-heavy border border-white/10 relative overflow-hidden group",
-    secondary: "bg-surfaceHighlight border border-white/10 hover:bg-white/10 text-textPrimary hover:text-white shadow-lg hover:shadow-xl",
-    accent: "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-glow-accent hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] border border-white/10",
+    primary: "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-glow hover:shadow-glow-heavy border border-white/10 relative overflow-hidden group hover:-translate-y-0.5",
+    secondary: "bg-surfaceHighlight border border-border hover:bg-surfaceHighlight/80 text-textPrimary hover:text-primary shadow-lg hover:shadow-xl hover:-translate-y-0.5",
+    accent: "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-glow-accent hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] border border-white/10 hover:-translate-y-0.5",
     danger: "bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40 shadow-lg",
-    ghost: "bg-transparent hover:bg-white/5 text-textSecondary hover:text-white"
+    ghost: "bg-transparent hover:bg-black/5 dark:hover:bg-white/5 text-textSecondary hover:text-textPrimary"
   };
 
   return (
     <button 
+      type={props.type || 'button'}
       className={clsx(baseStyles, sizeStyles[size], variants[variant], className)}
       disabled={isLoading || props.disabled}
       {...props}
     >
       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       {children}
-      {/* Glossy effect */}
       {(variant === 'primary' || variant === 'accent') && (
-         <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/10 group-hover:ring-white/30 transition-all"></div>
+         <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/10 group-hover:ring-white/30 transition-all pointer-events-none"></div>
       )}
     </button>
   );
 };
 
-export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement> & { label?: string }>(
-  ({ className, label, ...props }, ref) => (
-    <div className="space-y-2">
+export const VoiceInput = ({ onTranscript }: { onTranscript: (text: string) => void }) => {
+    const [listening, setListening] = useState(false);
+
+    const handleListen = () => {
+        if (!('webkitSpeechRecognition' in window)) {
+            alert("Voice input not supported in this browser.");
+            return;
+        }
+
+        const recognition = new (window as any).webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => setListening(true);
+        recognition.onend = () => setListening(false);
+        recognition.onresult = (event: any) => {
+            const text = event.results[0][0].transcript;
+            onTranscript(text);
+        };
+
+        recognition.start();
+    };
+
+    return (
+        <button 
+            type="button"
+            onClick={handleListen}
+            className={clsx(
+                "absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors z-20",
+                listening ? "text-red-500 bg-red-500/10 animate-pulse" : "text-textSecondary hover:text-primary hover:bg-white/5"
+            )}
+            title="Voice Input"
+        >
+            <Mic size={18} />
+        </button>
+    );
+};
+
+export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement> & { label?: string, enableVoice?: boolean, onVoiceInput?: (txt: string) => void }>(
+  ({ className, label, enableVoice, onVoiceInput, ...props }, ref) => (
+    <div className="space-y-2 w-full">
        {label && <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1">{label}</label>}
-       <input 
-         ref={ref}
-         className={clsx(
-           "w-full bg-surfaceHighlight/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white placeholder-textSecondary/40 focus:border-primary focus:bg-surfaceHighlight focus:ring-1 focus:ring-primary outline-none transition-all duration-300 shadow-inner",
-           className
-         )}
-         {...props}
-       />
+       <div className="relative">
+         <input 
+            ref={ref}
+            className={clsx(
+            "w-full bg-surfaceHighlight/50 border border-border rounded-xl px-5 py-4 text-sm text-textPrimary placeholder-textSecondary/40 focus:border-primary focus:bg-surfaceHighlight focus:ring-1 focus:ring-primary outline-none transition-all duration-300 relative z-10",
+            enableVoice ? "pr-12" : "",
+            className
+            )}
+            {...props}
+         />
+         {enableVoice && onVoiceInput && <VoiceInput onTranscript={onVoiceInput} />}
+       </div>
     </div>
   )
 );
 
 export const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement> & { label?: string }>(
   ({ className, label, children, ...props }, ref) => (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
        {label && <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1">{label}</label>}
        <div className="relative">
          <select 
            ref={ref}
            className={clsx(
-             "w-full bg-surfaceHighlight/50 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-primary focus:bg-surfaceHighlight focus:ring-1 focus:ring-primary outline-none transition-all duration-300 appearance-none cursor-pointer shadow-inner",
+             "w-full bg-surfaceHighlight border border-border rounded-xl px-5 py-4 text-sm text-textPrimary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-300 appearance-none cursor-pointer relative z-10",
              className
            )}
            {...props}
          >
-           {children}
+           {React.Children.map(children, child => {
+               if (React.isValidElement(child) && child.type === 'option') {
+                   // Ensure option text is visible regardless of theme
+                   return React.cloneElement(child as React.ReactElement<any>, { className: 'bg-surface text-textPrimary' });
+               }
+               return child;
+           })}
          </select>
-         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-textSecondary">
+         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-textSecondary z-20">
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -161,7 +204,7 @@ export const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttrib
 
 export const FileUpload = ({ label, accept, onFileSelect }: { label: string, accept: string, onFileSelect: (f: File) => void }) => {
   return (
-    <div className="h-full border-2 border-dashed border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center text-center hover:bg-white/5 hover:border-primary/50 transition-all duration-300 cursor-pointer relative group bg-surfaceHighlight/20 backdrop-blur-sm">
+    <div className="h-full border-2 border-dashed border-border rounded-3xl p-8 flex flex-col items-center justify-center text-center hover:bg-white/5 hover:border-primary/50 transition-all duration-300 cursor-pointer relative group bg-surfaceHighlight/20 backdrop-blur-sm">
       <input 
         type="file" 
         accept={accept}
@@ -187,3 +230,88 @@ export const DisclaimerBox = ({ text }: { text: string }) => (
     <p className="font-semibold leading-relaxed tracking-wide">{text}</p>
   </div>
 );
+
+// New: Modal Component
+export interface ModalProps {
+    children?: React.ReactNode;
+    onClose: () => void;
+    title?: string;
+}
+
+export const Modal = ({ children, onClose, title }: ModalProps) => {
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+            <div className="bg-surface border border-border w-full max-w-lg rounded-3xl shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh]">
+                <div className="p-6 border-b border-border flex justify-between items-center bg-surfaceHighlight/30">
+                    <h3 className="text-lg font-black text-textPrimary tracking-tight">{title || 'Info'}</h3>
+                    <button onClick={onClose} className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-textSecondary transition-colors">
+                        <X size={20} />
+                    </button>
+                </div>
+                <div className="p-6 overflow-y-auto custom-scrollbar">
+                    {children}
+                </div>
+            </div>
+            <div className="absolute inset-0 z-[-1]" onClick={onClose}></div>
+        </div>
+    );
+};
+
+// New: Page Guide Component
+export interface PageGuideProps {
+    title: string;
+    content: string;
+    onClose: () => void;
+}
+
+export const PageGuide = ({ title, content, onClose }: PageGuideProps) => {
+    return (
+        <Modal onClose={onClose} title={title}>
+            <div className="prose prose-invert prose-sm max-w-none text-textSecondary">
+                <div className="flex items-center gap-3 mb-4 p-4 bg-primary/10 rounded-xl border border-primary/20 text-primary">
+                    <Info className="shrink-0" size={24} />
+                    <p className="m-0 font-bold text-xs uppercase tracking-wider">Clinical Protocol & Usage Guide</p>
+                </div>
+                <ReactMarkdown>{content}</ReactMarkdown>
+            </div>
+            <div className="mt-6 pt-4 border-t border-border flex justify-end">
+                <Button size="sm" onClick={onClose}>Understood</Button>
+            </div>
+        </Modal>
+    );
+};
+
+// New: Reusable Page Header
+export interface PageHeaderProps {
+    title: React.ReactNode;
+    subtitle: string;
+    guide?: string;
+}
+
+export const PageHeader = ({ title, subtitle, guide }: PageHeaderProps) => {
+  const [showGuide, setShowGuide] = useState(false);
+  return (
+    <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 no-print gap-4">
+      <div>
+        <h1 className="text-3xl font-black text-textPrimary tracking-tight flex items-center gap-3">
+          {title}
+        </h1>
+        <p className="text-textSecondary text-sm font-medium tracking-wide mt-1">{subtitle}</p>
+      </div>
+      {guide && (
+        <>
+          <button 
+            type="button"
+            onClick={() => setShowGuide(true)}
+            className="self-start md:self-auto flex items-center gap-2 px-4 py-2 rounded-full bg-surfaceHighlight border border-border text-textSecondary hover:text-primary hover:border-primary transition-all shadow-sm group text-xs font-bold uppercase tracking-widest"
+            title="Open Clinical Guide"
+          >
+            <HelpCircle size={16} className="group-hover:scale-110 transition-transform" />
+            <span>Guide</span>
+          </button>
+          {showGuide && <PageGuide title="Clinical Module Protocol" content={guide} onClose={() => setShowGuide(false)} />}
+        </>
+      )}
+    </div>
+  );
+};

@@ -1,6 +1,7 @@
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Card, Button, FileUpload, DisclaimerBox } from '../components/Shared';
+import { Card, Button, FileUpload, DisclaimerBox, PageHeader } from '../components/Shared';
 import { generateMultimodalAnalysis } from '../services/geminiService';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
@@ -40,15 +41,24 @@ export const RxScanner = () => {
     }
   };
 
+  const guideContent = `
+**Rx Optical Scanner Protocol**
+
+1.  **Scanning**: Upload a clear photo of the handwritten or printed prescription.
+2.  **Extraction**: The AI identifies medication names, dosages, and instructions.
+3.  **Verification**: Always cross-reference the extracted text with the original document.
+
+*Note: Handy for digitizing records or deciphering handwriting.*
+  `;
+
   return (
     <div className="max-w-[1600px] mx-auto space-y-6 h-full flex flex-col">
-       <div className="flex items-center justify-between no-print shrink-0">
-         <div>
-            <h1 className="text-3xl font-black text-white tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-success to-emerald-400">
-            Rx Scanner
-            </h1>
-            <p className="text-textSecondary text-sm">Optical character recognition for handwritten prescriptions.</p>
-         </div>
+       <div className="shrink-0 no-print">
+         <PageHeader 
+            title={<span><span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-emerald-400">Rx</span> Scanner</span>}
+            subtitle={t.rxScanner.subtitle}
+            guide={guideContent}
+         />
       </div>
 
       <div className="flex-1 grid md:grid-cols-2 gap-8 min-h-0">
@@ -60,7 +70,7 @@ export const RxScanner = () => {
                        <div className="w-20 h-20 bg-surfaceHighlight/50 rounded-full flex items-center justify-center mb-6 shadow-glow">
                            <Camera className="text-success h-10 w-10" />
                        </div>
-                       <h3 className="text-xl font-bold text-white mb-2">Upload Rx Image</h3>
+                       <h3 className="text-xl font-bold text-textPrimary mb-2">{t.rxScanner.uploadText}</h3>
                        <p className="text-textSecondary text-sm max-w-xs mx-auto mb-8">Drag and drop or click to scan a prescription.</p>
                        <div className="absolute inset-0 opacity-0">
                            <FileUpload label="" accept="image/*" onFileSelect={handleFile} />
@@ -70,7 +80,9 @@ export const RxScanner = () => {
                    <div className="relative h-full w-full rounded-2xl overflow-hidden bg-black">
                        <img src={image} className="w-full h-full object-contain opacity-80" />
                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-                           <Button variant="secondary" size="sm" onClick={() => {setImage(null); setResult(null);}}>Retake Photo</Button>
+                           <Button variant="secondary" size="sm" onClick={() => {setImage(null); setResult(null);}}>
+                               <RefreshCw size={14} className="mr-2" /> {t.common.reset}
+                           </Button>
                        </div>
                    </div>
                )}
@@ -80,9 +92,9 @@ export const RxScanner = () => {
              onClick={analyze} 
              disabled={!image} 
              isLoading={loading}
-             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-surfaceHighlight border border-white/10 hover:bg-white/5 shadow-lg"
+             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-surfaceHighlight border border-white/10 hover:bg-white/5 shadow-lg text-textPrimary"
            >
-              Decrypt & Analyze
+              {t.common.analyze}
            </Button>
         </div>
 
@@ -91,10 +103,10 @@ export const RxScanner = () => {
             {!result ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center opacity-40">
                     <FileText size={64} className="mb-4 text-textSecondary" />
-                    <h3 className="text-lg font-bold text-white tracking-widest uppercase">Awaiting Scan</h3>
+                    <h3 className="text-lg font-bold text-textPrimary tracking-widest uppercase">{t.rxScanner.awaiting}</h3>
                 </div>
             ) : (
-                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none">
+                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none prose-headings:text-textPrimary prose-p:text-textSecondary">
                     <ReactMarkdown>{result}</ReactMarkdown>
                 </div>
             )}

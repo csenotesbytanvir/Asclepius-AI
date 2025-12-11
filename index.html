@@ -27,6 +27,7 @@
               accent: 'var(--color-accent)',
               textPrimary: 'var(--text-primary)',
               textSecondary: 'var(--text-secondary)',
+              border: 'var(--border-color)',
               success: '#10B981',
               warning: '#F59E0B',
               danger: '#EF4444',
@@ -76,6 +77,7 @@
         --color-accent: #06B6D4;
         --text-primary: #F8FAFC;
         --text-secondary: #94A3B8;
+        --border-color: rgba(255, 255, 255, 0.1);
         --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
         --shadow-accent: 0 0 20px rgba(6, 182, 212, 0.15);
       }
@@ -83,14 +85,15 @@
       .theme-clinical {
         --bg-app: #F0F4F8;
         --bg-surface: #FFFFFF;
-        --bg-highlight: #E2E8F0;
+        --bg-highlight: #F1F5F9;
         --color-primary: #0284C7; /* Sky 600 */
         --color-secondary: #4F46E5; /* Indigo 600 */
         --color-accent: #0D9488; /* Teal 600 */
         --text-primary: #0F172A;
         --text-secondary: #475569;
-        --shadow-glow: 0 4px 15px -1px rgba(2, 132, 199, 0.3);
-        --shadow-accent: 0 4px 15px -1px rgba(13, 148, 136, 0.3);
+        --border-color: rgba(0, 0, 0, 0.08);
+        --shadow-glow: 0 4px 15px -1px rgba(2, 132, 199, 0.2);
+        --shadow-accent: 0 4px 15px -1px rgba(13, 148, 136, 0.2);
       }
 
       .theme-onyx {
@@ -102,6 +105,7 @@
         --color-accent: #404040;
         --text-primary: #EDEDED;
         --text-secondary: #A0A0A0;
+        --border-color: rgba(255, 255, 255, 0.15);
         --shadow-glow: 0 0 25px rgba(255, 255, 255, 0.15);
         --shadow-accent: 0 0 25px rgba(255, 255, 255, 0.15);
       }
@@ -155,12 +159,11 @@
         background: rgba(15, 18, 24, 0.6);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-color);
       }
 
       .theme-clinical .glass-panel {
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.85);
       }
 
       /* Prescription Print Layout */
@@ -184,6 +187,7 @@
           height: auto !important;
           overflow: visible !important;
           position: static !important;
+          display: block !important;
         }
 
         .print-section {
@@ -194,6 +198,7 @@
           padding: 1cm !important;
           width: 100% !important;
           position: static !important;
+          page-break-inside: avoid;
         }
 
         h1, h2, h3, h4, p, span, div, strong {

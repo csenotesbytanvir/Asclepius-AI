@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
@@ -10,6 +11,10 @@ import { Chat } from './pages/Chat';
 import { Records } from './pages/Records';
 import { Welcome } from './pages/Welcome';
 import { Setup } from './pages/Setup';
+import { Pharmacology } from './pages/Pharmacology';
+import { Wellness } from './pages/Wellness';
+import { Library } from './pages/Library';
+import { Calculators } from './pages/Calculators';
 import { Language, AppTheme } from './types';
 import { cryptoService } from './services/cryptoService';
 import { initializeGemini } from './services/geminiService';
@@ -94,7 +99,11 @@ export default function App() {
               <Route path="/symptoms" element={<SymptomChecker />} />
               <Route path="/derm" element={<Dermatology />} />
               <Route path="/rx" element={<RxScanner />} />
+              <Route path="/pharmacology" element={<Pharmacology />} />
               <Route path="/lab" element={<LabIntelligence />} />
+              <Route path="/wellness" element={<Wellness />} />
+              <Route path="/calculators" element={<Calculators />} />
+              <Route path="/library" element={<Library />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/records" element={<Records />} />
               <Route path="*" element={<Navigate to="/" />} />

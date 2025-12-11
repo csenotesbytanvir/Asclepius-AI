@@ -1,5 +1,5 @@
 
-export type RecordType = 'symptom' | 'derm' | 'rx' | 'lab' | 'chat';
+export type RecordType = 'symptom' | 'derm' | 'rx' | 'lab' | 'chat' | 'wellness' | 'interaction';
 
 export interface RecordBase {
   id: string;
@@ -8,6 +8,12 @@ export interface RecordBase {
   createdAt: number; // timestamp
   language: string;
   payload: any; // Decrypted payload
+  meta?: {
+      age?: string;
+      sex?: string;
+      bodyPart?: string;
+      condition?: string;
+  };
 }
 
 // Stored version is encrypted
@@ -15,6 +21,12 @@ export interface EncryptedRecord {
   id: string;
   iv: string; // Base64
   data: string; // Base64
+  meta?: {
+      age?: string;
+      sex?: string;
+      bodyPart?: string;
+      condition?: string;
+  };
 }
 
 export interface SymptomPayload {
@@ -38,8 +50,12 @@ export interface AnalyticsData {
     totalRecords: number;
     conditionsMap: Record<string, number>;
     typeDistribution: Record<RecordType, number>;
-    activityByDate: { date: string; count: number }[];
-    demographics: { ageGroups: Record<string, number>; gender: Record<string, number> };
+    activityByDate: { date: string; label: string; count: number }[];
+    demographics: { 
+        ageGroups: Record<string, number>; 
+        gender: Record<string, number>;
+    };
+    bodyParts: Record<string, number>;
 }
 
 export type Language = 'en' | 'bn' | 'hi' | 'ar' | 'es' | 'fr' | 'zh' | 'ja';
@@ -66,10 +82,17 @@ export interface I18nContent {
     symptomChecker: string;
     dermatology: string;
     rxScanner: string;
+    pharmacology: string;
     labIntel: string;
+    wellness: string;
+    calculators: string;
+    library: string;
     chat: string;
     records: string;
     config: string;
+    diagnostics: string;
+    tools: string;
+    care: string;
   };
   common: {
     save: string;
@@ -86,6 +109,89 @@ export interface I18nContent {
     offlineMode: string;
     newIntake: string;
     viewDetails: string;
+    analyze: string;
+    reset: string;
+    guide: string;
+  };
+  dashboard: {
+    title: string;
+    subtitle: string;
+    biosystems: string;
+    biosystemsDesc: string;
+    privacy: string;
+    privacyDesc: string;
+    recentActivity: string;
+    analytics: string;
+    noRecords: string;
+  };
+  symptomChecker: {
+    title: string;
+    subtitle: string;
+    demographics: string;
+    name: string;
+    age: string;
+    sex: string;
+    step1: string;
+    notes: string;
+    assessment: string;
+    pharmacotherapy: string;
+    interventions: string;
+  };
+  dermatology: {
+    title: string;
+    subtitle: string;
+    uploadText: string;
+    awaiting: string;
+  };
+  rxScanner: {
+    title: string;
+    subtitle: string;
+    uploadText: string;
+    awaiting: string;
+  };
+  lab: {
+    title: string;
+    subtitle: string;
+    uploadText: string;
+    awaiting: string;
+  };
+  pharmacology: {
+    title: string;
+    subtitle: string;
+    lookup: string;
+    interaction: string;
+    drugName: string;
+    drugA: string;
+    drugB: string;
+    check: string;
+    mechanism: string;
+    indications: string;
+    sideEffects: string;
+    warnings: string;
+    pearls: string;
+  };
+  wellness: {
+    title: string;
+    subtitle: string;
+    chronic: string;
+    mental: string;
+    vaccinations: string;
+  };
+  calculators: {
+    title: string;
+    subtitle: string;
+  };
+  library: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    find: string;
+  };
+  records: {
+    title: string;
+    subtitle: string;
+    filter: string;
+    search: string;
   };
   disclaimer: {
     footer: string;
