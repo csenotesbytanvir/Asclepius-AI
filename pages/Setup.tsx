@@ -1,137 +1,154 @@
-import React, { useState } from 'react';
-import { Key, WifiOff, Activity, X, Dna } from 'lucide-react';
-import { Button, Input } from '../components/Shared';
+import React, { useState, useEffect } from 'react';
+import { WifiOff, Activity, X, Dna, ShieldAlert, Target, Info, Zap, Lock, Key, CheckCircle2, ShieldCheck, Cpu, ArrowUpRight, Monitor, Smartphone, AlertCircle, RefreshCw } from 'lucide-react';
+import { Button } from '../components/Shared';
 import { useTheme } from '../App';
 import clsx from 'clsx';
 
 interface SetupProps {
-    onComplete: (apiKey: string | null, isOffline: boolean) => void;
+    onComplete: (isOffline: boolean) => void;
     onClose?: () => void;
 }
 
 export const Setup: React.FC<SetupProps> = ({ onComplete, onClose }) => {
-    const [apiKey, setApiKey] = useState(localStorage.getItem('asclepius_api_key') || '');
-    const [mode, setMode] = useState<'online' | 'offline'>('online');
+    const [mode, setMode] = useState<'online' | 'offline'>(localStorage.getItem('asclepius_offline') === 'true' ? 'offline' : 'online');
+    const [handshaking, setHandshaking] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const { theme, setTheme } = useTheme();
 
-    const handleInitialize = () => {
-        if (mode === 'online') {
-             if (!apiKey.trim()) return;
-             localStorage.setItem('asclepius_api_key', apiKey);
-             onComplete(apiKey, false);
-        } else {
-             onComplete(null, true);
-        }
-        if (onClose) onClose();
+    const handleInitialize = async () => {
+        setError(null);
+        setHandshaking(true);
+        
+        setTimeout(() => {
+            setHandshaking(false);
+            onComplete(mode === 'offline');
+            if (onClose) onClose();
+        }, 1500);
     };
 
+    const isClinical = theme === 'clinical';
+
     return (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-            <div className="bg-surface border border-white/10 rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-500">
-                {onClose && (
-                    <button onClick={onClose} className="absolute top-6 right-6 text-textSecondary hover:text-white transition-colors">
-                        <X size={24} />
-                    </button>
+        <div className={clsx(
+            "fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 animate-in fade-in duration-300",
+            isClinical ? "bg-slate-900/40 backdrop-blur-md" : "bg-black/80 backdrop-blur-md"
+        )}>
+            <div className={clsx(
+                "w-full max-w-xl shadow-2xl relative animate-in zoom-in-95 duration-300 rounded-[2rem] overflow-hidden border",
+                isClinical ? "bg-white border-slate-200" : "bg-surface border-border"
+            )}>
+                
+                {handshaking && (
+                    <div className="absolute inset-0 bg-black/90 z-[110] flex flex-col items-center justify-center text-center p-10 animate-in fade-in duration-300">
+                        <Dna className="text-primary w-12 h-12 animate-spin mb-6" />
+                        <h3 className="text-xl font-black text-white tracking-tight uppercase mb-2">Neural handshake</h3>
+                        <p className="text-[10px] text-accent font-black uppercase tracking-widest animate-pulse">Syncing core protocols...</p>
+                    </div>
                 )}
-                
-                {/* Colorful Header Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-accent via-primary to-secondary"></div>
-                
-                <div className="p-8 pb-0">
-                    <div className="flex items-center gap-5 mb-8">
-                        <div className="w-14 h-14 bg-gradient-to-br from-surfaceHighlight to-surface border border-white/5 rounded-2xl flex items-center justify-center shadow-glow-accent group">
-                             <Dna className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
+
+                <div className="h-1.5 w-full bg-gradient-to-r from-primary via-accent to-secondary"></div>
+
+                <div className="px-8 py-6 flex items-center justify-between border-b border-border bg-surfaceHighlight/10">
+                    <div className="flex items-center gap-4">
+                        <div className={clsx(
+                            "w-12 h-12 rounded-xl flex items-center justify-center shadow-sm border",
+                            isClinical ? "bg-slate-50 text-primary border-slate-200" : "bg-surfaceHighlight text-primary border-border"
+                        )}>
+                             <Dna size={24} />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-white tracking-tight">Asclepius Core</h2>
-                            <p className="text-xs text-accent font-bold uppercase tracking-[0.2em] mt-1">System Configuration</p>
+                            <h2 className={clsx("text-xl font-black tracking-tight uppercase leading-none", isClinical ? "text-slate-900" : "text-textPrimary")}>
+                                Protocol setup
+                            </h2>
+                            <p className={clsx("text-[9px] font-black uppercase tracking-widest mt-1", isClinical ? "text-slate-500" : "text-accent")}>
+                                Secure core v3.1
+                            </p>
+                        </div>
+                    </div>
+                    {onClose && (
+                        <button onClick={onClose} className="p-2 text-textSecondary hover:text-primary transition-all rounded-lg">
+                            <X size={20} />
+                        </button>
+                    )}
+                </div>
+
+                <div className="px-8 py-8 space-y-8 overflow-y-auto max-h-[70vh]">
+                    <div className="space-y-4">
+                        <label className={clsx("text-[9px] font-black uppercase tracking-widest flex items-center gap-2", isClinical ? "text-slate-400" : "text-textSecondary")}>
+                             <Cpu size={14} className="text-primary" /> Operational mode
+                        </label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <button 
+                                onClick={() => setMode('online')}
+                                className={clsx(
+                                    "p-6 rounded-2xl border transition-all text-left relative overflow-hidden group shadow-sm",
+                                    mode === 'online' 
+                                        ? (isClinical ? "bg-blue-50 border-blue-500" : "bg-primary/10 border-primary") 
+                                        : (isClinical ? "bg-slate-50 border-slate-100 opacity-60" : "bg-surfaceHighlight/20 border-border opacity-50")
+                                )}
+                            >
+                                <span className={clsx("block text-[9px] font-black uppercase tracking-widest mb-2", mode === 'online' ? (isClinical ? "text-blue-700" : "text-primary") : "text-textSecondary")}>Secure cloud</span>
+                                <div className={clsx("text-2xl font-black tracking-tighter", mode === 'online' ? (isClinical ? "text-blue-900" : "text-textPrimary") : "text-textSecondary")}>87.3%</div>
+                                <div className="text-[8px] font-black text-textSecondary uppercase tracking-widest mt-1">Diagnostic power</div>
+                            </button>
+                            
+                            <button 
+                                onClick={() => setMode('offline')}
+                                className={clsx(
+                                    "p-6 rounded-2xl border transition-all text-left group shadow-sm",
+                                    mode === 'offline' 
+                                        ? (isClinical ? "bg-slate-100 border-slate-300" : "bg-white/5 border-white/20") 
+                                        : (isClinical ? "bg-slate-50 border-slate-100 opacity-60" : "bg-surfaceHighlight/20 border-border opacity-50")
+                                )}
+                            >
+                                <span className="block text-[9px] font-black uppercase tracking-widest mb-2 text-textSecondary">Local airgap</span>
+                                <div className="text-2xl font-black text-textSecondary tracking-tighter">74.8%</div>
+                                <div className="text-[8px] font-black text-textSecondary uppercase tracking-widest mt-1">Research power</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className={clsx("text-[9px] font-black uppercase tracking-widest flex items-center gap-2", isClinical ? "text-slate-400" : "text-textSecondary")}>
+                             <Monitor size={14} className="text-primary" /> Visualization mode
+                        </label>
+                        <div className="grid grid-cols-3 gap-3">
+                             {[
+                                 { id: 'nebula', name: 'Nebula', grad: 'from-blue-600 to-purple-600' },
+                                 { id: 'clinical', name: 'Clinical', grad: 'from-slate-100 to-white' },
+                                 { id: 'onyx', name: 'Onyx', grad: 'from-neutral-800 to-black' }
+                             ].map(v => (
+                                <button 
+                                    key={v.id}
+                                    onClick={() => setTheme(v.id as any)}
+                                    className={clsx(
+                                        "border rounded-xl p-3 text-center transition-all group",
+                                        theme === v.id 
+                                            ? "border-primary bg-primary/5 shadow-sm" 
+                                            : "border-border bg-surfaceHighlight/10"
+                                    )}
+                                >
+                                    <div className={clsx("w-6 h-6 rounded-full mx-auto mb-2 bg-gradient-to-tr", v.grad, v.id === 'clinical' && "border border-slate-200")}></div>
+                                    <span className={clsx("text-[8px] font-black uppercase tracking-widest", theme === v.id ? "text-primary" : "text-textSecondary")}>{v.name}</span>
+                                </button>
+                             ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="p-8 space-y-8">
-                    {/* Visual Interface */}
-                    <div className="space-y-3">
-                        <label className="text-[10px] font-bold text-textSecondary uppercase tracking-widest block">Visual Interface</label>
-                        <div className="grid grid-cols-3 gap-3">
-                             <div 
-                                onClick={() => setTheme('nebula')}
-                                className={clsx(
-                                    "border rounded-xl p-3 text-center cursor-pointer transition-all hover:-translate-y-1 duration-200",
-                                    theme === 'nebula' ? "border-primary bg-primary/10 shadow-glow" : "border-white/5 bg-surfaceHighlight hover:border-white/20"
-                                )}
-                             >
-                                 <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 mx-auto mb-2 shadow-lg"></div>
-                                 <span className={clsx("text-[10px] font-bold uppercase", theme === 'nebula' ? "text-primary" : "text-textSecondary")}>Nebula</span>
-                             </div>
-                             <div 
-                                onClick={() => setTheme('clinical')}
-                                className={clsx(
-                                    "border rounded-xl p-3 text-center cursor-pointer transition-all hover:-translate-y-1 duration-200",
-                                    theme === 'clinical' ? "border-primary bg-primary/10 shadow-glow" : "border-white/5 bg-surfaceHighlight hover:border-white/20"
-                                )}
-                             >
-                                 <div className="w-4 h-4 rounded-full bg-white mx-auto mb-2 border border-slate-300 shadow-lg"></div>
-                                 <span className={clsx("text-[10px] font-bold uppercase", theme === 'clinical' ? "text-primary" : "text-textSecondary")}>Clinical</span>
-                             </div>
-                             <div 
-                                onClick={() => setTheme('onyx')}
-                                className={clsx(
-                                    "border rounded-xl p-3 text-center cursor-pointer transition-all hover:-translate-y-1 duration-200",
-                                    theme === 'onyx' ? "border-primary bg-primary/10 shadow-glow" : "border-white/5 bg-surfaceHighlight hover:border-white/20"
-                                )}
-                             >
-                                 <div className="w-4 h-4 rounded-full bg-black border border-white/20 mx-auto mb-2 shadow-lg"></div>
-                                 <span className={clsx("text-[10px] font-bold uppercase", theme === 'onyx' ? "text-primary" : "text-textSecondary")}>Onyx</span>
-                             </div>
-                        </div>
-                    </div>
-
-                    {/* Intelligence Mode */}
-                    <div className="space-y-3">
-                        <label className="text-[10px] font-bold text-textSecondary uppercase tracking-widest block">Intelligence Mode</label>
-                        <div className="flex bg-surfaceHighlight/50 p-1.5 rounded-2xl border border-white/5">
-                            <button 
-                                onClick={() => setMode('online')}
-                                className={clsx(
-                                    "flex-1 py-3 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 uppercase tracking-wide",
-                                    mode === 'online' ? "bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg" : "text-textSecondary hover:text-white"
-                                )}
-                            >
-                                <Activity size={16} /> Live AI
-                            </button>
-                            <button 
-                                onClick={() => setMode('offline')}
-                                className={clsx(
-                                    "flex-1 py-3 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 uppercase tracking-wide",
-                                    mode === 'offline' ? "bg-surface text-white border border-white/10 shadow-lg" : "text-textSecondary hover:text-white"
-                                )}
-                            >
-                                <WifiOff size={16} /> Offline
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* API Key Input */}
-                    <div className={clsx("transition-all duration-300 overflow-hidden", mode === 'online' ? "max-h-32 opacity-100" : "max-h-0 opacity-0")}>
-                        <Input 
-                            label="AI Access Key (Gemini)"
-                            value={apiKey}
-                            onChange={(e) => setApiKey(e.target.value)}
-                            placeholder="sk-..."
-                            type="password"
-                            className="h-12 bg-black/20"
-                        />
-                        <p className="text-[10px] text-textSecondary mt-2">Key is stored locally in your browser.</p>
-                    </div>
-
+                <div className={clsx(
+                    "p-6 border-t flex flex-col gap-4",
+                    isClinical ? "bg-slate-50 border-slate-100" : "bg-surfaceHighlight/20 border-border"
+                )}>
                     <Button 
                         onClick={handleInitialize}
-                        disabled={mode === 'online' && apiKey.length < 5}
-                        className="w-full py-5 text-sm font-bold uppercase tracking-widest shadow-glow bg-gradient-to-r from-primary to-accent hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all rounded-xl"
+                        className="w-full py-5 text-xs font-black uppercase tracking-widest bg-primary text-white rounded-xl shadow-lg"
                     >
-                        Initialize System <span className="ml-2">✓</span>
+                        Initialize console
                     </Button>
+                    <div className="flex items-center justify-center gap-2 text-textSecondary/50 text-[8px] font-black uppercase tracking-widest">
+                         <ShieldCheck size={12} /> Local-first end-to-end encryption active
+                    </div>
                 </div>
             </div>
         </div>

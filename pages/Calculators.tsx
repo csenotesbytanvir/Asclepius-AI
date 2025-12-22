@@ -58,7 +58,7 @@ export const Calculators = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-       <div className="flex items-center gap-3 mb-6">
+       <div className="flex items-center gap-3 mb-6 no-print">
            <Calculator className="text-accent h-8 w-8" />
            <div>
                <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-500">{t.calculators.title}</h1>
@@ -66,7 +66,7 @@ export const Calculators = () => {
            </div>
        </div>
 
-       <div className="flex gap-2 overflow-x-auto pb-2 border-b border-border mb-6">
+       <div className="flex gap-2 overflow-x-auto pb-2 border-b border-border mb-6 no-print">
            {[
                { id: 'bmi', label: 'BMI' },
                { id: 'egfr', label: 'eGFR (MDRD)' },
@@ -76,7 +76,7 @@ export const Calculators = () => {
                   key={c.id}
                   onClick={() => setActiveTab(c.id as CalcType)}
                   className={clsx(
-                      "px-6 py-3 rounded-t-xl font-bold text-xs uppercase tracking-wide transition-all border-b-2",
+                      "px-6 py-3 rounded-t-xl font-bold text-xs uppercase tracking-wide transition-all border-b-2 whitespace-nowrap",
                       activeTab === c.id ? "border-accent text-accent bg-surfaceHighlight/50" : "border-transparent text-textSecondary hover:text-textPrimary"
                   )}
                >
@@ -90,8 +90,8 @@ export const Calculators = () => {
                <div className="max-w-md mx-auto space-y-6 animate-in fade-in">
                    <h3 className="text-xl font-bold text-textPrimary">Body Mass Index</h3>
                    <div className="grid grid-cols-2 gap-4">
-                       <Input label="Weight (kg)" type="number" value={weight} onChange={e => setWeight(e.target.value)} />
-                       <Input label="Height (cm)" type="number" value={height} onChange={e => setHeight(e.target.value)} />
+                       <Input label="Weight (kg)" type="number" step="any" value={weight} onChange={e => setWeight(e.target.value)} />
+                       <Input label="Height (cm)" type="number" step="any" value={height} onChange={e => setHeight(e.target.value)} />
                    </div>
                    <Button onClick={calculateBMI} className="w-full">Calculate</Button>
                    
@@ -114,8 +114,8 @@ export const Calculators = () => {
                <div className="max-w-md mx-auto space-y-6 animate-in fade-in">
                    <h3 className="text-xl font-bold text-textPrimary">eGFR (MDRD Study Equation)</h3>
                    <div className="space-y-4">
-                       <Input label="Serum Creatinine (mg/dL)" type="number" value={creat} onChange={e => setCreat(e.target.value)} />
-                       <Input label="Age (Years)" type="number" value={age} onChange={e => setAge(e.target.value)} />
+                       <Input label="Serum Creatinine (mg/dL)" type="number" step="any" value={creat} onChange={e => setCreat(e.target.value)} />
+                       <Input label="Age (Years)" type="number" step="any" value={age} onChange={e => setAge(e.target.value)} />
                        <div>
                            <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1 mb-2 block">Gender</label>
                            <div className="flex gap-2">

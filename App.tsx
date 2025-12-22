@@ -39,15 +39,11 @@ export default function App() {
     document.body.className = `theme-${theme}`;
   }, [theme]);
 
-  // Initialize systems
-  const initSystem = async (apiKey: string | null, offline: boolean) => {
-      // 1. Setup AI
+  // Initialize systems - updated to strictly follow guidelines regarding API Key usage
+  const initSystem = async (offline: boolean) => {
+      // 1. Setup AI (API Key is always pulled from process.env.API_KEY internally)
       setIsOffline(offline);
-      if (apiKey) {
-          initializeGemini(apiKey, false);
-      } else if (offline) {
-          initializeGemini('', true);
-      }
+      initializeGemini(offline);
 
       // 2. Setup Encryption (Auto-init with device key)
       let deviceKey = localStorage.getItem('asclepius_device_key');
@@ -63,19 +59,24 @@ export default function App() {
 
       setAppState('app');
       setShowConfig(false);
+      // Persist initialization state locally
+      localStorage.setItem('asclepius_initialized', 'true');
+      localStorage.setItem('asclepius_offline', String(offline));
   };
 
   const handleStartWelcome = () => {
-     const key = localStorage.getItem('asclepius_api_key');
-     if (key) {
-         initSystem(key, false);
+     // Auto-initialize if previously configured
+     const initialized = localStorage.getItem('asclepius_initialized');
+     if (initialized) {
+         const offline = localStorage.getItem('asclepius_offline') === 'true';
+         initSystem(offline);
      } else {
          setShowConfig(true);
      }
   };
 
-  const handleConfigComplete = (apiKey: string | null, offline: boolean) => {
-      initSystem(apiKey, offline);
+  const handleConfigComplete = (offline: boolean) => {
+      initSystem(offline);
   };
 
   // Render Welcome

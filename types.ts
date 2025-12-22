@@ -5,52 +5,56 @@ export interface RecordBase {
   id: string;
   type: RecordType;
   title: string;
-  createdAt: number; // timestamp
+  createdAt: number;
   language: string;
-  payload: any; // Decrypted payload
+  payload: any;
   meta?: {
       age?: string;
       sex?: string;
       bodyPart?: string;
       condition?: string;
+      specialty?: string;
+      confidence?: number;
   };
 }
 
-// Stored version is encrypted
 export interface EncryptedRecord {
   id: string;
-  iv: string; // Base64
-  data: string; // Base64
+  iv: string;
+  data: string;
   meta?: {
       age?: string;
       sex?: string;
       bodyPart?: string;
       condition?: string;
+      specialty?: string;
+      confidence?: number;
   };
 }
 
 export interface SymptomPayload {
   demographics: { name: string; age: string; sex: string };
-  symptom?: string;
   bodyPart?: string;
   symptoms?: string[];
-  otherSymptoms?: string; // Free text
-  duration?: string;
-  severity?: number;
-  history?: string;
-  
-  // Structured result
-  conditions?: { name: string; description: string }[];
+  otherSymptoms?: string;
+  conditions?: { 
+    name: string; 
+    description: string; 
+    confidence: number; 
+    etiology?: string;
+    specialty: string;
+  }[];
   treatments?: { name: string; dosage: string; description: string }[];
   lifestyle?: string[];
-  rawAnalysis: string; // Markdown fallback
+  rawAnalysis: string;
 }
 
 export interface AnalyticsData {
     totalRecords: number;
-    conditionsMap: Record<string, number>;
+    avgConfidence: number;
+    specialtyDistribution: Record<string, number>;
     typeDistribution: Record<RecordType, number>;
-    activityByDate: { date: string; label: string; count: number }[];
+    activityByDate: { date: string; label: string; count: number; accuracy: number }[];
     demographics: { 
         ageGroups: Record<string, number>; 
         gender: Record<string, number>;

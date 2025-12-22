@@ -1,19 +1,17 @@
-
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Card, Button, FileUpload, DisclaimerBox, PageHeader } from '../components/Shared';
+import React, { useState } from 'react';
+import { Card, Button, FileUpload, PageHeader, AsclepiusLogo, ClinicalScanner, IntelligenceLedger } from '../components/Shared';
 import { generateMultimodalAnalysis } from '../services/geminiService';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
-import { Save, Printer, ScanEye, UploadCloud, RefreshCcw } from 'lucide-react';
+import { ScanEye, RefreshCcw, Camera, Printer, BrainCircuit, Activity, FileText } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 export const Dermatology = () => {
   const { language } = useLanguage();
   const t = I18N[language];
-  const [image, setImage] = React.useState<string | null>(null);
-  const [result, setResult] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [result, setResult] = useState<any | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFile = (file: File) => {
     const reader = new FileReader();
@@ -25,98 +23,85 @@ export const Dermatology = () => {
     if (!image) return;
     setLoading(true);
     try {
-      const prompt = `
-        Role: Dermatology Educator.
-        Task: Analyze skin lesion.
-        Format: Markdown with sections: Visuals, Differentials, Management.
-      `;
+      const prompt = `Perform Comprehensive Dermatology Vision Assessment. 
+      STRICT JSON FORMAT REQ: { "conditions": [{"name": "", "description": "", "confidence": 0.0, "specialty": "Dermatology", "etiology": "", "pathophysiology": ""}], "treatments": [{"name": "", "dosage": "", "mechanism": "", "description": ""}], "lifestyle": [""] }`;
       const res = await generateMultimodalAnalysis(prompt, image, language);
-      setResult(res);
-    } catch (e) {
-      alert("Analysis failed.");
-    } finally {
-      setLoading(false);
+      
+      let parsedData: any = {};
+      try {
+        const jsonMatch = res.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            parsedData = JSON.parse(jsonMatch[0]);
+        } else {
+            throw new Error("No JSON found");
+        }
+      } catch (e) { 
+        parsedData = { rawAnalysis: res }; 
+      }
+      setResult(parsedData);
+    } catch (e) { 
+      alert("Neural handshake interrupted."); 
+    } finally { 
+      setLoading(false); 
     }
   };
 
-  const reset = () => {
-      setImage(null);
-      setResult(null);
-  };
-
-  const guideContent = `
-**Dermatology Vision Protocol**
-
-1.  **Image Capture**: Ensure good lighting and focus.
-2.  **Upload**: Select 'Upload Image' to import the lesion photo.
-3.  **Analysis**: The system analyzes visual features (Asymmetry, Border, Color, Diameter).
-4.  **Results**: Provides a differential diagnosis list and management suggestions.
-
-*Disclaimer: This is a screening tool, not a diagnostic device. Biopsy is the gold standard.*
-  `;
-
   return (
-    <div className="max-w-[1600px] mx-auto space-y-6 h-full flex flex-col">
-       <div className="shrink-0 no-print">
-         <PageHeader 
-            title={<span><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">Dermatology</span> Vision</span>}
-            subtitle={t.dermatology.subtitle}
-            guide={guideContent}
-         />
-      </div>
+    <div className="max-w-[1200px] mx-auto space-y-16 pb-48 animate-in fade-in duration-1000 px-4 md:px-0">
+      <PageHeader title={<span>Dermatology <span className="text-amber-500">Vision</span></span>} subtitle="Optical Integumentary Profiling Matrix" />
 
-      <div className="flex-1 grid md:grid-cols-2 gap-8 min-h-0">
-        {/* Left Panel: Upload */}
-        <div className="flex flex-col gap-6 h-full">
-           <div className="flex-1 glass-panel border border-white/5 rounded-3xl p-6 relative group overflow-hidden border-dashed border-2 border-pink-500/20 hover:border-pink-500/50 transition-colors">
-               {!image ? (
-                   <div className="h-full flex flex-col items-center justify-center text-center">
-                       <div className="w-24 h-24 bg-surfaceHighlight/50 rounded-full flex items-center justify-center mb-6 shadow-glow transition-transform group-hover:scale-110">
-                           <UploadCloud className="text-pink-500 h-10 w-10" />
-                       </div>
-                       <h3 className="text-xl font-bold text-textPrimary mb-2">{t.dermatology.uploadText}</h3>
-                       <div className="absolute inset-0 opacity-0">
-                           <FileUpload label="" accept="image/*" onFileSelect={handleFile} />
-                       </div>
-                   </div>
-               ) : (
-                   <div className="relative h-full w-full rounded-2xl overflow-hidden bg-black">
-                       <img src={image} className="w-full h-full object-contain" />
-                       <div className="absolute top-4 right-4 z-10">
-                           <Button variant="secondary" size="sm" onClick={reset}>
-                               <RefreshCcw size={14} className="mr-2" /> {t.common.reset}
-                           </Button>
-                       </div>
-                   </div>
-               )}
-           </div>
-           
-           <Button 
-             onClick={analyze} 
-             disabled={!image} 
-             isLoading={loading}
-             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-surfaceHighlight border border-white/10 hover:bg-white/5 shadow-lg text-textPrimary"
-           >
-             <ScanEye className="mr-2" /> {t.common.submit}
-           </Button>
-        </div>
-
-        {/* Right Panel: Results */}
-        <div className="bg-surfaceHighlight/50 backdrop-blur-xl border border-white/5 rounded-3xl p-8 flex flex-col h-full min-h-[500px] relative overflow-hidden shadow-inner">
-            {!result ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-center opacity-30">
-                    <div className="w-32 h-24 border-2 border-dashed border-textSecondary rounded-xl mb-4 flex items-center justify-center">
-                        <div className="w-10 h-10 bg-textSecondary rounded-full"></div>
-                    </div>
-                    <h3 className="text-lg font-bold text-textPrimary tracking-widest uppercase">{t.dermatology.awaiting}</h3>
-                </div>
+      <div className="max-w-4xl mx-auto space-y-12">
+        <div className="bg-surface/80 border-4 border-amber-500/20 rounded-[5rem] overflow-hidden shadow-clinical relative group">
+            {!image ? (
+                <div className="p-8 h-96 md:h-[500px]"><FileUpload label="Bio-Capture Clinical Skin Image" accept="image/*" onFileSelect={handleFile} icon={Camera} capture="environment" /></div>
             ) : (
-                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none prose-headings:text-textPrimary prose-p:text-textSecondary">
-                    <ReactMarkdown>{result}</ReactMarkdown>
+                <div className="relative h-96 md:h-[500px] bg-black/40 flex items-center justify-center p-12">
+                    {loading && <ClinicalScanner />}
+                    <img src={image} className="max-h-full max-w-full object-contain rounded-[2rem] shadow-glow-heavy border-2 border-white/20" alt="Capture" />
+                    <button onClick={() => {setImage(null); setResult(null);}} className="absolute top-10 right-10 bg-black/80 backdrop-blur-xl p-8 rounded-full text-white hover:text-red-500 transition-all shadow-2xl z-40 border-2 border-white/10"><RefreshCcw size={32} /></button>
                 </div>
             )}
         </div>
+        
+        {!result && (
+            <Button onClick={analyze} disabled={!image || loading} isLoading={loading} className="w-full py-16 text-3xl font-black rounded-[4rem] bg-amber-600 shadow-glow shadow-amber-500/30">
+                <ScanEye className="mr-6" size={40} /> Execute Vision Scan
+            </Button>
+        )}
       </div>
+
+      {result && (
+        <div className="animate-in slide-in-from-bottom-12 duration-1000 space-y-16">
+           <div className="bg-amber-500/10 border-4 border-amber-500/30 rounded-[4rem] p-12 flex flex-col md:flex-row items-center justify-between gap-10 backdrop-blur-3xl shadow-glow shadow-amber-500/10">
+              <div className="flex items-center gap-8">
+                <div className="w-24 h-24 bg-amber-500 text-white rounded-[2rem] flex items-center justify-center shrink-0 shadow-lg ring-8 ring-amber-500/20"><BrainCircuit size={48} /></div>
+                <div>
+                   <h3 className="text-4xl font-black text-amber-500 uppercase tracking-tighter">Vision Assessment Node</h3>
+                   <p className="text-sm text-textSecondary font-black uppercase tracking-[0.4em] mt-3 flex items-center gap-4"><Activity size={22} className="text-amber-500" /> Neural Link Synchronized</p>
+                </div>
+              </div>
+              <Button variant="secondary" onClick={() => window.print()} className="h-20 px-16 rounded-[2.5rem]"><Printer size={32} className="mr-4" /> Print Bio-Report</Button>
+           </div>
+
+           <div className="print-section glass border-4 border-amber-500/20 rounded-[5rem] p-12 md:p-24 shadow-glow-heavy relative overflow-hidden">
+               <div className="flex flex-col md:flex-row justify-between items-start border-b-8 border-amber-500/10 pb-16 mb-20 gap-12 relative z-10">
+                   <div className="space-y-8">
+                       <h1 className="text-5xl md:text-7xl font-black text-textPrimary tracking-tighter uppercase leading-none">Optical Skin Ledger</h1>
+                       <div className="flex items-center gap-10 text-textSecondary text-sm uppercase font-black tracking-[0.5em] opacity-80">
+                           <span className="bg-surfaceHighlight px-8 py-4 rounded-2xl border-2 border-border">PROTOCOL: VISION-DERM-{uuidv4().slice(0,6).toUpperCase()}</span>
+                       </div>
+                   </div>
+                   <AsclepiusLogo className="w-40 h-40 text-amber-500 opacity-60 drop-shadow-glow" />
+               </div>
+               
+               <IntelligenceLedger result={result} type="vision" />
+               
+               <div className="mt-40 pt-16 border-t-8 border-amber-500/5 text-center opacity-30 text-xs font-black uppercase tracking-[0.8em]">
+                   BIO-OPTIC SCAN ANALYSIS • ARCHIVE VAULTED AES-256
+               </div>
+           </div>
+        </div>
+      )}
     </div>
   );
 };

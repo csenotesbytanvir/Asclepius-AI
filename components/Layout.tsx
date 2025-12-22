@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
@@ -16,7 +15,11 @@ import {
   Pill,
   HeartPulse,
   BookOpen,
-  Calculator
+  Calculator,
+  ShieldCheck,
+  Zap,
+  Globe,
+  WifiOff
 } from 'lucide-react';
 import { I18N } from '../constants';
 import { useLanguage } from '../App';
@@ -32,55 +35,33 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline }) => {
   const { language, setLanguage } = useLanguage();
-  const t = I18N[language].nav;
+  const t = I18N[language];
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
-  // Grouped Navigation for better organization
-  const diagnosticItems = [
-    { to: '/', icon: LayoutDashboard, label: t.dashboard },
-    { to: '/symptoms', icon: Stethoscope, label: t.symptomChecker },
-    { to: '/derm', icon: ScanEye, label: t.dermatology },
-    { to: '/lab', icon: Microscope, label: t.labIntel },
-  ];
-
-  const medicationItems = [
-    { to: '/rx', icon: FileText, label: t.rxScanner },
-    { to: '/pharmacology', icon: Pill, label: t.pharmacology },
-    { to: '/calculators', icon: Calculator, label: t.calculators },
-  ];
-
-  const careItems = [
-    { to: '/wellness', icon: HeartPulse, label: t.wellness },
-    { to: '/library', icon: BookOpen, label: t.library },
-    { to: '/chat', icon: MessageSquare, label: t.chat },
-    { to: '/records', icon: FolderLock, label: t.records },
-  ];
-
   const NavGroup = ({ title, items }: { title: string, items: any[] }) => (
-    <>
-      <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mt-6 mb-2 opacity-60">{title}</div>
+    <div className="mb-6">
+      <div className="text-[10px] font-black text-textSecondary uppercase tracking-[0.3em] px-6 mb-3 opacity-50">{title}</div>
       {items.map((item) => (
         <NavLink
           key={item.to}
           to={item.to}
           onClick={() => setSidebarOpen(false)}
           className={({ isActive }) => clsx(
-            "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
+            "flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group relative overflow-hidden mb-1 mx-3",
             isActive 
-              ? "bg-gradient-to-r from-primary/20 to-transparent border-l-2 border-primary shadow-glow translate-x-1" 
-              : "text-textSecondary hover:bg-black/5 dark:hover:bg-white/5 hover:text-textPrimary hover:translate-x-1"
+              ? "bg-primary/20 border-l-4 border-primary text-primary shadow-glow ring-1 ring-white/5" 
+              : "text-textSecondary hover:bg-surfaceHighlight hover:text-textPrimary"
           )}
         >
           {({ isActive }) => (
              <>
                 <item.icon className={clsx(
-                    "h-5 w-5 transition-colors", 
-                    isActive ? "text-primary drop-shadow-[0_0_5px_currentColor]" : "text-textSecondary group-hover:text-primary"
+                    "h-5 w-5 transition-all duration-300", 
+                    isActive ? "text-primary scale-110 drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]" : "text-textSecondary group-hover:text-primary group-hover:scale-110"
                 )} />
                 <span className={clsx(
-                    "font-medium text-sm relative z-10 transition-colors",
-                    // Ensure text is dark in light mode when active
-                    isActive ? "text-primary font-bold" : "text-textSecondary group-hover:text-textPrimary"
+                    "font-bold text-[13px] tracking-tight uppercase",
+                    isActive ? "text-primary" : "text-textSecondary group-hover:text-textPrimary"
                 )}>
                     {item.label}
                 </span>
@@ -88,136 +69,131 @@ export const Layout: React.FC<LayoutProps> = ({ children, onConfig, isOffline })
           )}
         </NavLink>
       ))}
-    </>
+    </div>
   );
+
+  const diagnosticItems = [
+    { to: '/', icon: LayoutDashboard, label: t.nav.dashboard },
+    { to: '/symptoms', icon: Stethoscope, label: t.nav.symptomChecker },
+    { to: '/derm', icon: ScanEye, label: t.nav.dermatology },
+    { to: '/lab', icon: Microscope, label: t.nav.labIntel },
+  ];
+
+  const medicationItems = [
+    { to: '/rx', icon: FileText, label: t.nav.rxScanner },
+    { to: '/pharmacology', icon: Pill, label: t.nav.pharmacology },
+    { to: '/calculators', icon: Calculator, label: t.nav.calculators },
+  ];
+
+  const careItems = [
+    { to: '/wellness', icon: HeartPulse, label: t.nav.wellness },
+    { to: '/library', icon: BookOpen, label: t.nav.library },
+    { to: '/chat', icon: MessageSquare, label: t.nav.chat },
+    { to: '/records', icon: FolderLock, label: t.nav.records },
+  ];
 
   return (
     <div className="h-[100dvh] bg-background text-textPrimary flex overflow-hidden print:bg-white print:text-black print:h-auto relative">
-      {/* Global Background Animation */}
       <div className="aurora-bg"></div>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-surface/90 backdrop-blur-xl border-b border-surfaceHighlight no-print shadow-lg h-[60px]">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-surface/90 backdrop-blur-2xl border-b border-border no-print h-[75px] shadow-2xl">
         <div className="flex items-center gap-3">
-          {/* Mobile Logo */}
-          <div className="w-8 h-8 flex items-center justify-center">
-               <AsclepiusLogo className="w-8 h-8 text-primary" />
+          <AsclepiusLogo className="w-10 h-10 text-primary" />
+          <div className="flex flex-col">
+            <span className="font-black text-xl tracking-tighter text-textPrimary leading-none">ASCLEPIUS</span>
+            <div className="flex items-center gap-1.5 mt-1">
+               {isOffline ? <WifiOff size={11} className="text-warning" /> : <Globe size={11} className="text-success" />}
+               <span className={clsx("text-[9px] font-black uppercase tracking-widest", isOffline ? "text-warning" : "text-success")}>
+                  {isOffline ? "Offline Protocol" : "Secure Online Cloud"}
+               </span>
+            </div>
           </div>
-          <span className="font-black text-lg tracking-wider font-sans bg-clip-text text-transparent bg-gradient-to-r from-primary to-white">ASCLEPIUS</span>
         </div>
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-textSecondary hover:text-textPrimary bg-surfaceHighlight/50 rounded-lg">
-          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-3 text-textSecondary hover:text-textPrimary bg-surfaceHighlight/50 rounded-2xl border border-border shadow-inner">
+          {sidebarOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
       {/* Sidebar */}
       <aside className={clsx(
-        "fixed md:relative z-40 h-full w-72 bg-surface/80 backdrop-blur-xl border-r border-surfaceHighlight flex flex-col transition-transform duration-300 no-print shadow-2xl md:shadow-none pt-[60px] md:pt-0",
+        "fixed md:relative z-40 h-full w-85 bg-surface/95 backdrop-blur-3xl border-r border-border flex flex-col transition-transform duration-500 no-print shadow-2xl md:shadow-none pt-[75px] md:pt-0 shrink-0",
         sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       )}>
-        {/* Brand Header */}
-        <div className="p-8 pb-4 hidden md:block">
-          <div className="flex items-center gap-4 mb-2">
-             <div className="relative w-12 h-12 flex items-center justify-center">
-                 <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary opacity-40 blur-xl rounded-full animate-pulse"></div>
-                 {/* Standardized Logo */}
-                 <AsclepiusLogo className="w-12 h-12 text-primary drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+        <div className="p-10 pb-6 hidden md:block">
+          <div className="flex items-center gap-5 mb-8">
+             <div className="relative w-16 h-16 flex items-center justify-center">
+                 <div className="absolute inset-0 bg-primary opacity-20 blur-2xl rounded-full animate-pulse"></div>
+                 <AsclepiusLogo className="w-16 h-16 text-primary drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]" />
              </div>
              <div>
-                <h1 className="font-black text-xl tracking-tighter text-textPrimary">ASCLEPIUS</h1>
-                <p className="text-[10px] text-textSecondary uppercase tracking-widest">Medical Intelligence</p>
+                <h1 className="font-black text-2xl tracking-tighter text-textPrimary leading-none">ASCLEPIUS</h1>
+                <p className="text-[10px] text-textSecondary uppercase tracking-[0.4em] font-black mt-2 opacity-60">Intelligence Suite</p>
              </div>
           </div>
-          <div className="mt-6 flex items-center gap-2 px-3 py-1.5 bg-surfaceHighlight/50 rounded-full w-fit border border-white/5">
-              <span className={clsx("w-2 h-2 rounded-full animate-pulse", isOffline ? "bg-warning" : "bg-success shadow-[0_0_8px_#10b981]")}></span>
-              <span className="text-[10px] font-bold tracking-wider text-textSecondary uppercase">
-                  {isOffline ? I18N[language].common.offlineMode : I18N[language].common.systemOperational}
+          <div className={clsx(
+              "flex items-center gap-3 px-5 py-3 rounded-2xl w-full border shadow-xl backdrop-blur-md",
+              isOffline ? "bg-warning/10 border-warning/30" : "bg-success/10 border-success/30"
+          )}>
+              <div className="relative">
+                <span className={clsx("block w-3 h-3 rounded-full animate-ping absolute", isOffline ? "bg-warning" : "bg-success")}></span>
+                <span className={clsx("block w-3 h-3 rounded-full relative", isOffline ? "bg-warning" : "bg-success shadow-[0_0_10px_#10b981]")}></span>
+              </div>
+              <span className={clsx("text-[11px] font-black tracking-widest uppercase", isOffline ? "text-warning" : "text-success")}>
+                  {isOffline ? "Offline Protocols Active" : "Neural Link Established"}
               </span>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
-          <div className="text-[10px] font-bold text-textSecondary uppercase tracking-widest px-4 mb-2 opacity-60">Diagnostics</div>
-          {diagnosticItems.map((item) => (
-             <NavLink
-             key={item.to}
-             to={item.to}
-             onClick={() => setSidebarOpen(false)}
-             className={({ isActive }) => clsx(
-               "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden",
-               isActive 
-                 ? "bg-gradient-to-r from-primary/20 to-transparent border-l-2 border-primary shadow-glow translate-x-1" 
-                 : "text-textSecondary hover:bg-black/5 dark:hover:bg-white/5 hover:text-textPrimary hover:translate-x-1"
-             )}
-           >
-             {({ isActive }) => (
-                <>
-                   <item.icon className={clsx(
-                       "h-5 w-5 transition-colors", 
-                       isActive ? "text-primary drop-shadow-[0_0_5px_currentColor]" : "text-textSecondary group-hover:text-primary"
-                   )} />
-                   <span className={clsx(
-                       "font-medium text-sm relative z-10 transition-colors",
-                       isActive ? "text-primary font-bold" : "text-textSecondary group-hover:text-textPrimary"
-                   )}>
-                       {item.label}
-                   </span>
-                </>
-             )}
-           </NavLink>
-          ))}
-          
-          <NavGroup title="Pharmacology & Tools" items={medicationItems} />
-          <NavGroup title="Patient Care" items={careItems} />
+        <nav className="flex-1 py-4 space-y-2 overflow-y-auto custom-scrollbar">
+          <NavGroup title={t.nav.diagnostics} items={diagnosticItems} />
+          <NavGroup title={t.nav.tools} items={medicationItems} />
+          <NavGroup title={t.nav.care} items={careItems} />
         </nav>
 
-        {/* Settings Footer in Sidebar */}
-        <div className="p-4 border-t border-surfaceHighlight space-y-3 bg-surfaceHighlight/20 backdrop-blur-md">
-            <div className="flex items-center justify-between px-2">
-                 <span className="text-[10px] font-bold text-textSecondary uppercase tracking-widest">Interface Language</span>
-                 <Languages size={12} className="text-textSecondary" />
+        <div className="p-6 border-t border-border bg-surfaceHighlight/20 space-y-4">
+            <div className="space-y-2">
+                 <div className="flex items-center justify-between px-3">
+                      <span className="text-[10px] font-black text-textSecondary uppercase tracking-[0.3em] opacity-60">Intelligence Core</span>
+                      <Languages size={14} className="text-primary" />
+                 </div>
+                 <select 
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value as Language)}
+                    className="w-full bg-surfaceHighlight border border-border rounded-xl px-5 py-3.5 text-[13px] font-bold text-textPrimary focus:border-primary outline-none transition-all cursor-pointer shadow-inner appearance-none"
+                >
+                    {LANGUAGES.map(lang => (
+                        <option key={lang.code} value={lang.code} className="text-black bg-white">{lang.label}</option>
+                    ))}
+                </select>
             </div>
-            <select 
-                value={language}
-                onChange={(e) => setLanguage(e.target.value as Language)}
-                className="w-full bg-surface border border-border rounded-lg p-2 text-xs text-textPrimary focus:border-primary outline-none hover:border-primary transition-colors cursor-pointer"
-            >
-                {LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code} className="bg-surface text-textPrimary">{lang.label}</option>
-                ))}
-            </select>
           
           <button 
             type="button"
             onClick={onConfig}
-            className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-textSecondary hover:bg-black/5 dark:hover:bg-white/5 hover:text-textPrimary transition-all group mt-2"
+            className="flex items-center gap-5 px-5 py-4 w-full rounded-2xl text-textSecondary hover:bg-primary/10 hover:text-primary transition-all group border border-transparent hover:border-primary/20 shadow-sm"
           >
-            <Settings className="h-5 w-5 group-hover:rotate-90 transition-transform duration-500" />
+            <Settings className="h-6 w-6 group-hover:rotate-180 transition-transform duration-700" />
             <div className="text-left">
-                <span className="block font-bold text-xs text-textPrimary">{t.config}</span>
-                <span className="block text-[10px] opacity-60">System Settings</span>
+                <span className="block font-black text-[13px] uppercase tracking-widest">{t.nav.config}</span>
+                <span className="block text-[10px] opacity-60 font-bold uppercase tracking-tighter">System Integration Protocol</span>
             </div>
           </button>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-full relative overflow-hidden pt-[60px] md:pt-0">
+      <main className="flex-1 flex flex-col h-full relative overflow-hidden pt-[75px] md:pt-0">
         <div className="flex-1 overflow-y-auto scroll-smooth custom-scrollbar flex flex-col">
-           <div className="flex-1 p-4 md:p-8 md:pt-12 pb-12 w-full max-w-[1600px] mx-auto">
+           <div className="flex-1 p-6 md:p-14 w-full max-w-[1600px] mx-auto">
                {children}
            </div>
-           
-           {/* Static Footer within flow */}
-           <AppFooter disclaimer={I18N[language].disclaimer.footer} />
+           <AppFooter disclaimer={t.disclaimer.footer} />
         </div>
       </main>
 
-      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/80 z-30 md:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-black/80 z-30 md:hidden backdrop-blur-md animate-in fade-in duration-500"
           onClick={() => setSidebarOpen(false)}
         />
       )}

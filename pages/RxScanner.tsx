@@ -1,19 +1,18 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Card, Button, FileUpload, DisclaimerBox, PageHeader } from '../components/Shared';
+import { Card, Button, FileUpload, PageHeader, AsclepiusLogo, RxBadge, ClinicalScanner, IntelligenceLedger } from '../components/Shared';
 import { generateMultimodalAnalysis } from '../services/geminiService';
 import { useLanguage } from '../App';
 import { I18N } from '../constants';
-import { Save, Printer, RefreshCw, FileText, Camera } from 'lucide-react';
+import { RefreshCcw, FileText, Camera, ShieldCheck, Printer, CheckCircle, BrainCircuit, Pill, Zap } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 export const RxScanner = () => {
   const { language } = useLanguage();
   const t = I18N[language];
-  const [image, setImage] = React.useState<string | null>(null);
-  const [result, setResult] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [result, setResult] = useState<any | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFile = (file: File) => {
     const reader = new FileReader();
@@ -25,93 +24,129 @@ export const RxScanner = () => {
     if (!image) return;
     setLoading(true);
     try {
-      const prompt = `
-        Role: Clinical Pharmacist.
-        Task: Extract Rx details.
-        Output format: Markdown.
-        Sections: Detected Medications, Instructions, Educational Class, Safety Warnings.
-        Keep it clean and professional.
-      `;
+      const prompt = `Role: Senior Clinical Pharmacologist. Perform neural decryption of this prescription. Output JSON.`;
       const res = await generateMultimodalAnalysis(prompt, image, language);
-      setResult(res);
+      
+      let parsedData: any = {};
+      try {
+        const jsonMatch = res.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            parsedData = JSON.parse(jsonMatch[0]);
+        } else {
+            throw new Error("No JSON found");
+        }
+      } catch (e) { 
+        parsedData = { rawAnalysis: res }; 
+      }
+      setResult(parsedData);
     } catch (e) {
-      alert("Analysis failed.");
+      alert("Pharmacology Handshake Interrupted.");
     } finally {
       setLoading(false);
     }
   };
 
-  const guideContent = `
-**Rx Optical Scanner Protocol**
-
-1.  **Scanning**: Upload a clear photo of the handwritten or printed prescription.
-2.  **Extraction**: The AI identifies medication names, dosages, and instructions.
-3.  **Verification**: Always cross-reference the extracted text with the original document.
-
-*Note: Handy for digitizing records or deciphering handwriting.*
-  `;
+  const reset = () => {
+    setImage(null);
+    setResult(null);
+  };
 
   return (
-    <div className="max-w-[1600px] mx-auto space-y-6 h-full flex flex-col">
-       <div className="shrink-0 no-print">
-         <PageHeader 
-            title={<span><span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-emerald-400">Rx</span> Scanner</span>}
-            subtitle={t.rxScanner.subtitle}
-            guide={guideContent}
-         />
+    <div className="max-w-[1200px] mx-auto space-y-16 pb-32 animate-in fade-in duration-700 px-4 md:px-0">
+       <PageHeader 
+          title={<span>Rx <span className="text-emerald-500">Decrypter</span></span>} 
+          subtitle="Neural Optical Pharmacotherapy Recognition" 
+       />
+
+      <div className="space-y-12">
+        <div className="relative group mx-auto max-w-3xl">
+            <Card className="p-0 bg-surface/80 border-2 border-emerald-500/10 overflow-hidden rounded-[3rem] shadow-glow shadow-emerald-500/10 relative">
+                {!image ? (
+                    <div className="h-96 md:h-[500px] flex items-center justify-center p-6">
+                        <FileUpload 
+                          label="Deploy Prescription for Neural Decryption" 
+                          accept="image/*,application/pdf" 
+                          onFileSelect={handleFile} 
+                          icon={Camera}
+                          color="rx"
+                        />
+                    </div>
+                ) : (
+                    <div className="relative h-96 md:h-[500px] rounded-[3rem] overflow-hidden bg-black/20 flex items-center justify-center border-2 border-emerald-500/20 shadow-2xl">
+                        {loading && <ClinicalScanner />}
+                        {image.startsWith('data:application/pdf') ? (
+                            <div className="flex flex-col items-center gap-6 text-emerald-500">
+                                <FileText size={100} className="animate-pulse" />
+                                <span className="font-black uppercase tracking-[0.4em] text-lg">VIGNETTE SECURED</span>
+                            </div>
+                        ) : (
+                            <img src={image} className="max-h-full max-w-full object-contain p-8" alt="Rx Capture" />
+                        )}
+                        <button 
+                          onClick={reset} 
+                          className="absolute top-8 right-8 bg-black/80 backdrop-blur-2xl p-6 rounded-full text-white hover:bg-red-500 transition-all shadow-glow shadow-red-500/20 border border-white/10 z-30"
+                        >
+                            <RefreshCcw size={28} />
+                        </button>
+                    </div>
+                )}
+            </Card>
+        </div>
+        
+        {!result && (
+            <div className="mx-auto max-w-2xl">
+              <Button 
+                onClick={analyze} 
+                disabled={!image || loading} 
+                isLoading={loading}
+                variant="rx"
+                size="lg"
+                className="w-full py-12 text-2xl font-black rounded-[2rem] hover:scale-[1.02]"
+              >
+                <Pill className="mr-6" size={40} /> Commence Decryption
+              </Button>
+            </div>
+        )}
       </div>
 
-      <div className="flex-1 grid md:grid-cols-2 gap-8 min-h-0">
-        {/* Left Panel: Upload */}
-        <div className="flex flex-col gap-6 h-full">
-           <div className="flex-1 glass-panel border border-white/5 rounded-3xl p-6 relative group overflow-hidden border-dashed border-2 border-emerald-500/20 hover:border-emerald-500/50 transition-colors">
-               {!image ? (
-                   <div className="h-full flex flex-col items-center justify-center text-center">
-                       <div className="w-20 h-20 bg-surfaceHighlight/50 rounded-full flex items-center justify-center mb-6 shadow-glow">
-                           <Camera className="text-success h-10 w-10" />
-                       </div>
-                       <h3 className="text-xl font-bold text-textPrimary mb-2">{t.rxScanner.uploadText}</h3>
-                       <p className="text-textSecondary text-sm max-w-xs mx-auto mb-8">Drag and drop or click to scan a prescription.</p>
-                       <div className="absolute inset-0 opacity-0">
-                           <FileUpload label="" accept="image/*" onFileSelect={handleFile} />
-                       </div>
-                   </div>
-               ) : (
-                   <div className="relative h-full w-full rounded-2xl overflow-hidden bg-black">
-                       <img src={image} className="w-full h-full object-contain opacity-80" />
-                       <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-                           <Button variant="secondary" size="sm" onClick={() => {setImage(null); setResult(null);}}>
-                               <RefreshCw size={14} className="mr-2" /> {t.common.reset}
-                           </Button>
-                       </div>
-                   </div>
-               )}
+      {result && (
+        <div className="space-y-16 animate-in slide-in-from-bottom-8 duration-700">
+           <div className="bg-emerald-500/5 border-2 border-emerald-500/10 rounded-[2.5rem] p-8 flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-3xl shadow-glow shadow-emerald-500/10">
+              <div className="flex items-center gap-6">
+                <div className="w-20 h-20 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-glow shadow-emerald-500/20 ring-4 ring-emerald-500/10">
+                  <BrainCircuit size={40} />
+                </div>
+                <div>
+                   <h3 className="text-3xl font-black text-textPrimary uppercase tracking-tighter text-emerald-500">Decryption Ledger</h3>
+                   <p className="text-xs text-textSecondary font-black uppercase tracking-[0.3em] mt-2 flex items-center gap-3">
+                     <ShieldCheck size={20} className="text-emerald-500" /> Neural Pharma Handshake Active
+                   </p>
+                </div>
+              </div>
+              <Button variant="secondary" onClick={() => window.print()} className="rounded-2xl px-12 h-16 border-2 border-emerald-500/5 shadow-lg w-full md:w-auto">
+                  <Printer size={28} className="mr-4" /> Print Pharma-Report
+              </Button>
            </div>
-           
-           <Button 
-             onClick={analyze} 
-             disabled={!image} 
-             isLoading={loading}
-             className="w-full py-5 text-lg font-bold uppercase tracking-widest bg-surfaceHighlight border border-white/10 hover:bg-white/5 shadow-lg text-textPrimary"
-           >
-              {t.common.analyze}
-           </Button>
-        </div>
 
-        {/* Right Panel: Results */}
-        <div className="glass-panel border border-white/5 rounded-3xl p-8 flex flex-col h-full min-h-[500px] relative overflow-hidden">
-            {!result ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-center opacity-40">
-                    <FileText size={64} className="mb-4 text-textSecondary" />
-                    <h3 className="text-lg font-bold text-textPrimary tracking-widest uppercase">{t.rxScanner.awaiting}</h3>
-                </div>
-            ) : (
-                <div className="flex-1 overflow-y-auto custom-scrollbar prose prose-invert max-w-none prose-headings:text-textPrimary prose-p:text-textSecondary">
-                    <ReactMarkdown>{result}</ReactMarkdown>
-                </div>
-            )}
+           <div className="print-section glass border-2 border-emerald-500/10 rounded-[4rem] p-10 md:p-24 shadow-2xl relative overflow-hidden">
+               <div className="flex flex-col md:flex-row justify-between items-start border-b-4 border-emerald-500/5 pb-12 mb-16 gap-10 relative z-10">
+                   <div className="space-y-8 flex-1">
+                       <h1 className="text-4xl md:text-7xl font-black text-textPrimary tracking-tighter uppercase leading-none">Pharma <span className="text-emerald-500">Intelligence</span></h1>
+                       <div className="flex flex-wrap items-center gap-8 text-textSecondary text-xs uppercase font-black tracking-[0.4em] opacity-80">
+                           <span className="flex items-center gap-4 bg-emerald-500/5 border-2 border-emerald-500/10 px-8 py-4 rounded-2xl">LEDGER ID: RX-{uuidv4().slice(0,8).toUpperCase()}</span>
+                       </div>
+                   </div>
+                   <RxBadge className="w-32 h-32 shadow-glow shadow-emerald-500/40 opacity-40 shrink-0" />
+               </div>
+
+               <IntelligenceLedger result={result} type="pharma" />
+
+               <div className="mt-24 pt-12 border-t-2 border-dashed border-emerald-500/10 text-center opacity-30 text-[10px] font-black uppercase tracking-[0.6em]">
+                   BIO-OPTIC SCAN ANALYSIS • ARCHIVE VAULTED AES-256
+               </div>
+           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

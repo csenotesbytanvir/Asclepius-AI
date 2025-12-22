@@ -1,14 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <base href="/" />
-    <title>Asclepius AI - Clinical Decision Support</title>
-    <meta name="description" content="Advanced medical intelligence and clinical decision support system for healthcare professionals." />
+    <title>Asclepius AI - Clinical Intelligence Console</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%233b82f6%22/><path d=%22M30 50 L70 50 M50 30 L50 70%22 stroke=%22white%22 stroke-width=%2215%22 stroke-linecap=%22round%22/></svg>">
+    <meta name="description" content="Advanced medical intelligence and clinical decision support system." />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -28,39 +28,10 @@
               textPrimary: 'var(--text-primary)',
               textSecondary: 'var(--text-secondary)',
               border: 'var(--border-color)',
-              success: '#10B981',
-              warning: '#F59E0B',
-              danger: '#EF4444',
             },
             boxShadow: {
-              'glow': 'var(--shadow-glow)',
-              'glow-accent': 'var(--shadow-accent)',
-              'glow-heavy': '0 0 50px rgba(59, 130, 246, 0.5)',
-            },
-            animation: {
-              'float': 'float 6s ease-in-out infinite',
-              'float-y': 'floatY 5s ease-in-out infinite',
-              'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'aurora': 'aurora 20s linear infinite',
-            },
-            keyframes: {
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-20px)' },
-              },
-              floatY: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-15px)' },
-              },
-              pulseGlow: {
-                '0%, 100%': { opacity: 1 },
-                '50%': { opacity: .7 },
-              },
-              aurora: {
-                '0%': { backgroundPosition: '0% 50%' },
-                '50%': { backgroundPosition: '100% 50%' },
-                '100%': { backgroundPosition: '0% 50%' },
-              }
+              'glow': '0 0 15px var(--shadow-color)',
+              'clinical': '0 8px 30px -10px rgba(0,0,0,0.4)',
             }
           }
         }
@@ -68,168 +39,87 @@
     </script>
     <style>
       :root {
-        /* Default (Nebula) */
-        --bg-app: #05050A;
-        --bg-surface: #0F1218;
-        --bg-highlight: #1A1E29;
-        --color-primary: #3B82F6;
-        --color-secondary: #8B5CF6;
-        --color-accent: #06B6D4;
-        --text-primary: #F8FAFC;
-        --text-secondary: #94A3B8;
-        --border-color: rgba(255, 255, 255, 0.1);
-        --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
-        --shadow-accent: 0 0 20px rgba(6, 182, 212, 0.15);
+        --bg-app: #030712;
+        --bg-surface: rgba(17, 24, 39, 0.8);
+        --bg-highlight: rgba(31, 41, 55, 0.6);
+        --color-primary: #3b82f6;
+        --color-secondary: #8b5cf6;
+        --color-accent: #06b6d4;
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --border-color: rgba(75, 85, 99, 0.4);
+        --shadow-color: rgba(59, 130, 246, 0.2);
       }
-
       .theme-clinical {
-        --bg-app: #F0F4F8;
-        --bg-surface: #FFFFFF;
-        --bg-highlight: #F1F5F9;
-        --color-primary: #0284C7; /* Sky 600 */
-        --color-secondary: #4F46E5; /* Indigo 600 */
-        --color-accent: #0D9488; /* Teal 600 */
-        --text-primary: #0F172A;
-        --text-secondary: #475569;
-        --border-color: rgba(0, 0, 0, 0.08);
-        --shadow-glow: 0 4px 15px -1px rgba(2, 132, 199, 0.2);
-        --shadow-accent: 0 4px 15px -1px rgba(13, 148, 136, 0.2);
+        --bg-app: #f8fafc;
+        --bg-surface: rgba(255, 255, 255, 0.95);
+        --bg-highlight: #ffffff;
+        --color-primary: #2563eb;
+        --color-secondary: #6366f1;
+        --color-accent: #0891b2;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --shadow-color: rgba(37, 99, 235, 0.1);
       }
-
       .theme-onyx {
         --bg-app: #000000;
-        --bg-surface: #0A0A0A;
-        --bg-highlight: #171717;
-        --color-primary: #FFFFFF;
-        --color-secondary: #737373;
-        --color-accent: #404040;
-        --text-primary: #EDEDED;
-        --text-secondary: #A0A0A0;
-        --border-color: rgba(255, 255, 255, 0.15);
-        --shadow-glow: 0 0 25px rgba(255, 255, 255, 0.15);
-        --shadow-accent: 0 0 25px rgba(255, 255, 255, 0.15);
+        --bg-surface: #0a0a0a;
+        --bg-highlight: #121212;
+        --color-primary: #3b82f6;
+        --color-secondary: #3f3f46;
+        --color-accent: #27272a;
+        --text-primary: #ffffff;
+        --text-secondary: #71717a;
+        --border-color: #27272a;
+        --shadow-color: rgba(255, 255, 255, 0.05);
       }
-
-      html, body {
-        background-color: var(--bg-app);
-        color: var(--text-primary);
-        font-family: 'Inter', sans-serif;
-        transition: background-color 0.5s ease, color 0.5s ease;
-        margin: 0;
-        padding: 0;
-        width: 100vw;
-        min-height: 100%;
+      html, body { 
+        background-color: var(--bg-app); 
+        color: var(--text-primary); 
+        font-family: 'Inter', sans-serif; 
+        margin: 0; padding: 0; width: 100vw; height: 100%; 
         overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
       }
-      
-      #root {
-        min-height: 100vh;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
+      .aurora-bg { 
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; 
+        background: radial-gradient(circle at 10% 20%, var(--color-primary), transparent 40%),
+                    radial-gradient(circle at 90% 80%, var(--color-secondary), transparent 40%),
+                    var(--bg-app);
+        opacity: 0.1;
+        filter: blur(100px);
+        pointer-events: none;
       }
-      
-      /* Global Animated Background Layer */
-      .aurora-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;
-        background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #0f172a);
-        background-size: 400% 400%;
-        animation: aurora 20s ease infinite;
-        opacity: 0.8;
-      }
-
-      .theme-clinical .aurora-bg {
-         background: linear-gradient(-45deg, #f0f9ff, #e0f2fe, #dbeafe, #f0f9ff);
-         opacity: 1;
-      }
-      
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
-      ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: var(--bg-highlight); border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-      
-      /* Transparency Utilities */
-      .glass-panel {
-        background: rgba(15, 18, 24, 0.6);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+      .glass {
+        background: var(--bg-surface);
+        backdrop-filter: blur(20px) saturate(150%);
+        -webkit-backdrop-filter: blur(20px) saturate(150%);
         border: 1px solid var(--border-color);
       }
-
-      .theme-clinical .glass-panel {
-        background: rgba(255, 255, 255, 0.85);
-      }
-
-      /* Prescription Print Layout */
-      @media print {
-        @page { margin: 0; size: A4 portrait; }
-        body {
-          background-color: white !important;
-          color: black !important;
-          overflow: visible !important;
-          height: auto !important;
-        }
-        .no-print { display: none !important; }
-        .print-only { display: block !important; }
-        .aurora-bg { display: none !important; }
-        
-        #root, main, .max-w-6xl { 
-          width: 100% !important; 
-          max-width: none !important; 
-          margin: 0 !important; 
-          padding: 0 !important;
-          height: auto !important;
-          overflow: visible !important;
-          position: static !important;
-          display: block !important;
-        }
-
-        .print-section {
-          background: white !important;
-          border: none !important;
-          box-shadow: none !important;
-          color: black !important;
-          padding: 1cm !important;
-          width: 100% !important;
-          position: static !important;
-          page-break-inside: avoid;
-        }
-
-        h1, h2, h3, h4, p, span, div, strong {
-          color: black !important;
-          text-shadow: none !important;
-        }
-        
-        .print-header {
-            border-bottom: 2px solid #000 !important;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-      }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 10px; }
+      
+      @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(1000%); } }
+      .animate-scan { animation: scan 3s ease-in-out infinite; }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.32.0",
-    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
-    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.10.1",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.557.0",
-    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
-    "react-hook-form": "https://aistudiocdn.com/react-hook-form@^7.68.0",
-    "clsx": "https://aistudiocdn.com/clsx@^2.1.1"
-  }
-}
-</script>
-</head>
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3",
+        "uuid": "https://esm.sh/uuid@^13.0.0",
+        "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+        "react-router-dom": "https://esm.sh/react-router-dom@^7.11.0",
+        "react-markdown": "https://esm.sh/react-markdown@^10.1.0",
+        "react-hook-form": "https://esm.sh/react-hook-form@^7.69.0",
+        "clsx": "https://esm.sh/clsx@^2.1.1"
+      }
+    }
+    </script>
+  </head>
   <body>
     <div id="root"></div>
   </body>

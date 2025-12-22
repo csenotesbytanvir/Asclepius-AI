@@ -1,317 +1,260 @@
-
 import React, { useState } from 'react';
-import { Loader2, Mic, X, HelpCircle, Info } from 'lucide-react';
+import { Loader2, X, HelpCircle, Info, Zap, AlertCircle, Check, Pill, Activity, HeartPulse, Brain, ShieldCheck, Microscope, FileText, ChevronRight, Star } from 'lucide-react';
 import clsx from 'clsx';
 import ReactMarkdown from 'react-markdown';
 
 export const AsclepiusLogo = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 200 200" className={clsx("drop-shadow-lg", className)} fill="none">
+  <svg viewBox="0 0 200 200" className={clsx("drop-shadow-2xl", className)} fill="none">
       <defs>
           <linearGradient id="dnaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="var(--color-primary)" />
               <stop offset="100%" stopColor="var(--color-accent)" />
           </linearGradient>
       </defs>
-      <path d="M60,20 Q100,60 60,100 T60,180" stroke="url(#dnaGradient)" strokeWidth="12" strokeLinecap="round" opacity="0.9" />
-      <path d="M140,20 Q100,60 140,100 T140,180" stroke="var(--color-secondary)" strokeWidth="12" strokeLinecap="round" opacity="0.9" />
-      <line x1="70" y1="30" x2="130" y2="30" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
-      <line x1="85" y1="50" x2="115" y2="50" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
-      <line x1="85" y1="150" x2="115" y2="150" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
-      <line x1="70" y1="170" x2="130" y2="170" stroke="currentColor" strokeWidth="3" strokeOpacity="0.4" />
-      <circle cx="100" cy="60" r="8" fill="white" className="animate-pulse" />
-      <circle cx="100" cy="140" r="8" fill="white" className="animate-pulse" style={{animationDelay: '1s'}} />
+      <path d="M60,20 Q100,60 60,100 T60,180" stroke="url(#dnaGradient)" strokeWidth="15" strokeLinecap="round" opacity="0.9" />
+      <path d="M140,20 Q100,60 140,100 T140,180" stroke="var(--color-secondary)" strokeWidth="15" strokeLinecap="round" opacity="0.9" />
+      <circle cx="100" cy="60" r="10" fill="white" className="animate-pulse" />
+      <circle cx="100" cy="140" r="10" fill="white" className="animate-pulse" style={{animationDelay: '1s'}} />
   </svg>
 );
 
+export const ClinicalScanner = () => (
+    <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden rounded-3xl">
+        <div className="w-full h-1 bg-gradient-to-r from-transparent via-primary/60 to-transparent animate-scan blur-sm"></div>
+        <div className="absolute inset-0 bg-primary/5 backdrop-blur-[2px]"></div>
+    </div>
+);
+
 export const RxBadge = ({ className }: { className?: string }) => (
-  <div className={clsx("relative inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-900/40 border border-emerald-500/30 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]", className)}>
-     <span className="font-serif font-black italic text-sm pr-0.5 pt-0.5">Rx</span>
-     <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+  <div className={clsx("relative inline-flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400", className)}>
+     <span className="font-serif font-black italic text-lg">Rx</span>
   </div>
 );
 
 export const AppFooter = ({ disclaimer }: { disclaimer: string }) => (
-  <footer className="py-6 text-center z-10 no-print w-full">
-    <div className="container mx-auto px-4 flex flex-col items-center gap-3">
-       <div className="flex items-center gap-2 opacity-80 hover:opacity-100 transition-opacity">
-          <AsclepiusLogo className="w-5 h-5" />
-          <span className="text-xs font-black tracking-widest text-textPrimary">ASCLEPIUS AI</span>
+  <footer className="py-8 text-center z-10 no-print w-full border-t border-border mt-auto px-6 backdrop-blur-3xl">
+    <div className="container mx-auto flex flex-col items-center gap-3">
+       <div className="flex items-center gap-2">
+          <AsclepiusLogo className="w-6 h-6" />
+          <span className="text-[10px] font-black tracking-[0.3em] text-textPrimary uppercase">Asclepius AI</span>
        </div>
-       <p className="text-[10px] text-textSecondary font-bold tracking-[0.1em] uppercase flex flex-col md:flex-row items-center justify-center gap-2 max-w-xl text-center leading-relaxed">
+       <p className="text-[9px] text-textSecondary font-bold max-w-4xl leading-relaxed uppercase tracking-widest opacity-50 px-4">
          {disclaimer}
-       </p>
-       <div className="h-px w-24 bg-border my-1"></div>
-       <p className="text-[10px] text-textSecondary font-mono opacity-60 uppercase tracking-wider">
-          © 2025 • Architected by Tanvir Ahmmed
        </p>
     </div>
   </footer>
 );
 
-export interface CardProps {
-  children?: React.ReactNode;
-  className?: string;
-  title?: React.ReactNode;
-  action?: React.ReactNode;
-}
-
-export const Card = ({ children, className, title, action }: CardProps) => (
-  <div className={clsx("bg-surface/80 backdrop-blur-md border border-border rounded-2xl p-6 shadow-xl hover:border-primary/20 transition-all duration-300", className)}>
+export const Card = ({ children, className, title, action, variant = 'glass' }: { children?: React.ReactNode; className?: string; title?: React.ReactNode; action?: React.ReactNode; variant?: 'glass' | 'solid' }) => (
+  <div className={clsx(
+    "border rounded-3xl p-6 md:p-8 transition-all relative overflow-hidden",
+    variant === 'glass' ? "glass shadow-clinical" : "bg-surfaceHighlight border-border shadow-md",
+    className
+  )}>
     {(title || action) && (
-      <div className="flex justify-between items-start mb-6">
-        {title && <h3 className="text-lg font-bold text-textPrimary tracking-tight">{title}</h3>}
-        {action && <div>{action}</div>}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-border/20 pb-4 relative z-10 gap-2">
+        {title && <h3 className="text-lg md:text-xl font-black text-textPrimary tracking-tight uppercase leading-none">{title}</h3>}
+        {action && <div className="relative z-20 w-full md:w-auto">{action}</div>}
       </div>
     )}
-    {children}
+    <div className="relative z-10">{children}</div>
   </div>
 );
 
-export const Button = ({ 
-  children, 
-  isLoading, 
-  variant = 'primary', 
-  size = 'default',
-  className, 
-  ...props 
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { 
-  isLoading?: boolean, 
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'accent',
-  size?: 'default' | 'sm' | 'lg' | 'icon'
-}) => {
-  const baseStyles = "inline-flex items-center justify-center rounded-xl font-bold tracking-wide transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#05050A] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transform cursor-pointer select-none";
-  
-  const sizeStyles = {
-    default: "px-6 py-3 text-sm",
-    sm: "px-4 py-2 text-xs",
-    lg: "px-8 py-5 text-base",
-    icon: "p-3"
+export const Button = ({ children, isLoading, variant = 'primary', size = 'default', className, ...props }: any) => {
+  const baseStyles = "inline-flex items-center justify-center rounded-xl font-black transition-all duration-200 focus:outline-none disabled:opacity-50 active:scale-[0.98] transform uppercase tracking-[0.1em] select-none";
+  const sizeStyles = { 
+    default: "px-5 py-3 text-[10px]", 
+    sm: "px-3 py-1.5 text-[9px]", 
+    lg: "px-8 py-4 text-xs md:text-sm" 
   };
-
   const variants = {
-    primary: "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-glow hover:shadow-glow-heavy border border-white/10 relative overflow-hidden group hover:-translate-y-0.5",
-    secondary: "bg-surfaceHighlight border border-border hover:bg-surfaceHighlight/80 text-textPrimary hover:text-primary shadow-lg hover:shadow-xl hover:-translate-y-0.5",
-    accent: "bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white shadow-glow-accent hover:shadow-[0_0_40px_rgba(6,182,212,0.6)] border border-white/10 hover:-translate-y-0.5",
-    danger: "bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40 shadow-lg",
-    ghost: "bg-transparent hover:bg-black/5 dark:hover:bg-white/5 text-textSecondary hover:text-textPrimary"
+    primary: "bg-primary text-white border border-primary/20 shadow-glow",
+    secondary: "bg-surfaceHighlight border border-border text-textPrimary hover:bg-border/30",
+    accent: "bg-accent text-white border border-accent/20",
+    danger: "bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20",
+    rx: "bg-emerald-600 text-white shadow-emerald-500/20 border border-emerald-500/20"
   };
-
   return (
-    <button 
-      type={props.type || 'button'}
-      className={clsx(baseStyles, sizeStyles[size], variants[variant], className)}
-      disabled={isLoading || props.disabled}
-      {...props}
-    >
-      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+    <button className={clsx(baseStyles, sizeStyles[size], (variants as any)[variant], className)} disabled={isLoading || props.disabled} {...props}>
+      {isLoading && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
       {children}
-      {(variant === 'primary' || variant === 'accent') && (
-         <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-white/10 group-hover:ring-white/30 transition-all pointer-events-none"></div>
-      )}
     </button>
   );
 };
 
-export const VoiceInput = ({ onTranscript }: { onTranscript: (text: string) => void }) => {
-    const [listening, setListening] = useState(false);
+export const Input = React.forwardRef<HTMLInputElement, any>(({ label, className, ...props }, ref) => (
+    <div className="space-y-1.5 w-full">
+       {label && <label className="text-[9px] font-black text-textSecondary uppercase tracking-[0.2em] ml-1 opacity-70">{label}</label>}
+       <input 
+          ref={ref} 
+          className={clsx(
+              "w-full bg-surface/50 border border-border rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-textSecondary/30 focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all font-semibold", 
+              className
+          )} 
+          {...props} 
+        />
+    </div>
+));
 
-    const handleListen = () => {
-        if (!('webkitSpeechRecognition' in window)) {
-            alert("Voice input not supported in this browser.");
-            return;
-        }
-
-        const recognition = new (window as any).webkitSpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
-
-        recognition.onstart = () => setListening(true);
-        recognition.onend = () => setListening(false);
-        recognition.onresult = (event: any) => {
-            const text = event.results[0][0].transcript;
-            onTranscript(text);
-        };
-
-        recognition.start();
-    };
-
-    return (
-        <button 
-            type="button"
-            onClick={handleListen}
-            className={clsx(
-                "absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors z-20",
-                listening ? "text-red-500 bg-red-500/10 animate-pulse" : "text-textSecondary hover:text-primary hover:bg-white/5"
-            )}
-            title="Voice Input"
+export const Select = React.forwardRef<HTMLSelectElement, any>(({ label, className, children, ...props }, ref) => (
+    <div className="space-y-1.5 w-full">
+       {label && <label className="text-[9px] font-black text-textSecondary uppercase tracking-[0.2em] ml-1 opacity-70">{label}</label>}
+       <select 
+          ref={ref} 
+          className={clsx(
+              "w-full bg-surface/50 border border-border rounded-xl px-4 py-2.5 text-sm text-textPrimary focus:border-primary outline-none transition-all cursor-pointer appearance-none font-semibold", 
+              className
+          )} 
+          {...props}
         >
-            <Mic size={18} />
-        </button>
-    );
-};
-
-export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement> & { label?: string, enableVoice?: boolean, onVoiceInput?: (txt: string) => void }>(
-  ({ className, label, enableVoice, onVoiceInput, ...props }, ref) => (
-    <div className="space-y-2 w-full">
-       {label && <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1">{label}</label>}
-       <div className="relative">
-         <input 
-            ref={ref}
-            className={clsx(
-            "w-full bg-surfaceHighlight/50 border border-border rounded-xl px-5 py-4 text-sm text-textPrimary placeholder-textSecondary/40 focus:border-primary focus:bg-surfaceHighlight focus:ring-1 focus:ring-primary outline-none transition-all duration-300 relative z-10",
-            enableVoice ? "pr-12" : "",
-            className
-            )}
-            {...props}
-         />
-         {enableVoice && onVoiceInput && <VoiceInput onTranscript={onVoiceInput} />}
-       </div>
+           {children}
+       </select>
     </div>
-  )
-);
+));
 
-export const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement> & { label?: string }>(
-  ({ className, label, children, ...props }, ref) => (
-    <div className="space-y-2 w-full">
-       {label && <label className="text-xs font-bold text-textSecondary uppercase tracking-widest ml-1">{label}</label>}
-       <div className="relative">
-         <select 
-           ref={ref}
-           className={clsx(
-             "w-full bg-surfaceHighlight border border-border rounded-xl px-5 py-4 text-sm text-textPrimary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all duration-300 appearance-none cursor-pointer relative z-10",
-             className
-           )}
-           {...props}
-         >
-           {React.Children.map(children, child => {
-               if (React.isValidElement(child) && child.type === 'option') {
-                   // Ensure option text is visible regardless of theme
-                   return React.cloneElement(child as React.ReactElement<any>, { className: 'bg-surface text-textPrimary' });
-               }
-               return child;
-           })}
-         </select>
-         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-textSecondary z-20">
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-         </div>
-       </div>
-    </div>
-  )
-);
+export const IntelligenceLedger = ({ result, type = 'clinical' }: { result: any, type?: 'clinical' | 'vision' | 'pharma' | 'pathology' }) => {
+    const themeStyles = {
+        clinical: { bg: 'bg-primary/10', border: 'border-primary/20', accent: 'text-primary', icon: Brain },
+        vision: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', accent: 'text-amber-500', icon: Microscope },
+        pharma: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', accent: 'text-emerald-500', icon: Pill },
+        pathology: { bg: 'bg-purple-500/10', border: 'border-purple-500/20', accent: 'text-purple-500', icon: Activity }
+    };
+    
+    const style = themeStyles[type];
+    const Icon = style.icon;
 
-export const FileUpload = ({ label, accept, onFileSelect }: { label: string, accept: string, onFileSelect: (f: File) => void }) => {
-  return (
-    <div className="h-full border-2 border-dashed border-border rounded-3xl p-8 flex flex-col items-center justify-center text-center hover:bg-white/5 hover:border-primary/50 transition-all duration-300 cursor-pointer relative group bg-surfaceHighlight/20 backdrop-blur-sm">
-      <input 
-        type="file" 
-        accept={accept}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-        onChange={(e) => {
-          if (e.target.files?.[0]) onFileSelect(e.target.files[0]);
-        }}
-      />
-      
-      <div className="w-20 h-20 rounded-full bg-surfaceHighlight flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-2xl group-hover:shadow-glow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary group-hover:text-accent transition-colors"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-      </div>
-      
-      <span className="font-bold text-lg text-textPrimary group-hover:text-primary transition-colors">{label}</span>
-      <span className="text-xs text-textSecondary mt-2 uppercase tracking-wide opacity-70">Supports JPG, PNG • Max 5MB</span>
-    </div>
-  );
-};
-
-export const DisclaimerBox = ({ text }: { text: string }) => (
-  <div className="bg-gradient-to-r from-orange-500/10 to-transparent border-l-4 border-warning p-4 rounded-r-xl flex gap-4 text-warning/90 text-sm mb-6 print:hidden items-start shadow-lg backdrop-blur-sm">
-    <svg className="h-6 w-6 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
-    <p className="font-semibold leading-relaxed tracking-wide">{text}</p>
-  </div>
-);
-
-// New: Modal Component
-export interface ModalProps {
-    children?: React.ReactNode;
-    onClose: () => void;
-    title?: string;
-}
-
-export const Modal = ({ children, onClose, title }: ModalProps) => {
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-surface border border-border w-full max-w-lg rounded-3xl shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh]">
-                <div className="p-6 border-b border-border flex justify-between items-center bg-surfaceHighlight/30">
-                    <h3 className="text-lg font-black text-textPrimary tracking-tight">{title || 'Info'}</h3>
-                    <button onClick={onClose} className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-textSecondary transition-colors">
-                        <X size={20} />
-                    </button>
+        <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
+            {/* Primary Analysis Module */}
+            <section>
+                <div className="flex items-center gap-3 mb-6">
+                   <h3 className={clsx("text-[9px] font-black text-white px-4 py-2 rounded-lg uppercase tracking-widest flex items-center gap-2", style.bg.replace('/10', ''))}>
+                       <Icon size={14} /> Neural Assessment Ledger
+                   </h3>
                 </div>
-                <div className="p-6 overflow-y-auto custom-scrollbar">
-                    {children}
+
+                <div className="grid grid-cols-1 gap-6">
+                    {result.conditions?.map((cond: any, i: number) => (
+                        <div key={i} className={clsx("bg-surfaceHighlight/20 border rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 shadow-sm", style.border)}>
+                            <div className="flex-1 space-y-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                                    <h4 className="text-lg md:text-xl font-black text-textPrimary tracking-tight leading-tight">{cond.name}</h4>
+                                    <span className={clsx("text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border", style.bg, style.border)}>{cond.specialty}</span>
+                                </div>
+                                <p className="text-textSecondary text-xs md:text-sm leading-relaxed font-medium opacity-90">{cond.description}</p>
+                                
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                                    <div className="space-y-1">
+                                        <span className="text-[8px] font-black uppercase tracking-widest text-textSecondary opacity-40">Etiology</span>
+                                        <p className="text-xs text-textPrimary font-bold leading-relaxed">{cond.etiology || "N/A"}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <span className="text-[8px] font-black uppercase tracking-widest text-textSecondary opacity-40">Pathophysiology</span>
+                                        <p className="text-xs text-textPrimary font-bold leading-relaxed">{cond.pathophysiology || "N/A"}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="md:w-40 flex flex-col items-center justify-center bg-background/30 rounded-2xl p-4 border border-white/5">
+                                <div className={clsx("text-3xl md:text-4xl font-black tracking-tighter", style.accent)}>{(cond.confidence * 100).toFixed(0)}%</div>
+                                <div className="text-[8px] font-black text-textSecondary uppercase tracking-widest text-center opacity-40">Confidence</div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
+            </section>
+
+            <div className="grid lg:grid-cols-2 gap-6">
+                <section className="space-y-4">
+                    <h3 className="text-[9px] font-black text-white bg-emerald-600 px-4 py-2 rounded-lg uppercase tracking-widest flex items-center gap-2 w-fit">
+                        <Pill size={14} /> Pharmacotherapy
+                    </h3>
+                    <div className="space-y-3">
+                        {result.treatments?.map((tx: any, i: number) => (
+                            <div key={i} className="bg-surfaceHighlight/20 border-l-4 border-emerald-500 rounded-xl p-4 flex flex-col gap-2">
+                                <div className="flex items-center justify-between">
+                                    <span className="font-black text-textPrimary text-sm">{tx.name}</span>
+                                    <span className="text-[9px] font-mono font-black text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/10">{tx.dosage}</span>
+                                </div>
+                                <p className="text-xs text-textSecondary font-medium leading-relaxed">{tx.mechanism || tx.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="space-y-4">
+                    <h3 className="text-[9px] font-black text-white bg-cyan-600 px-4 py-2 rounded-lg uppercase tracking-widest flex items-center gap-2 w-fit">
+                        <HeartPulse size={14} /> Prophylactic Protocol
+                    </h3>
+                    <div className="space-y-2">
+                        {result.lifestyle?.map((item: string, i: number) => (
+                            <div key={i} className="bg-surfaceHighlight/20 border-l-4 border-cyan-500 rounded-xl p-4 flex items-start gap-4">
+                                <Check size={14} className="text-cyan-400 mt-0.5 shrink-0" />
+                                <p className="text-xs text-textPrimary font-semibold leading-relaxed">{item}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             </div>
-            <div className="absolute inset-0 z-[-1]" onClick={onClose}></div>
         </div>
     );
 };
 
-// New: Page Guide Component
-export interface PageGuideProps {
-    title: string;
-    content: string;
-    onClose: () => void;
-}
-
-export const PageGuide = ({ title, content, onClose }: PageGuideProps) => {
+export const PageHeader = ({ title, subtitle, guide }: { title: any, subtitle: string, guide?: string }) => {
+    const [showGuide, setShowGuide] = useState(false);
     return (
-        <Modal onClose={onClose} title={title}>
-            <div className="prose prose-invert prose-sm max-w-none text-textSecondary">
-                <div className="flex items-center gap-3 mb-4 p-4 bg-primary/10 rounded-xl border border-primary/20 text-primary">
-                    <Info className="shrink-0" size={24} />
-                    <p className="m-0 font-bold text-xs uppercase tracking-wider">Clinical Protocol & Usage Guide</p>
+        <div className="flex flex-col mb-10 no-print relative w-full">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="space-y-1">
+                    <h1 className="text-xl md:text-2xl font-black text-textPrimary tracking-tight leading-none">{title}</h1>
+                    <p className="text-textSecondary text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase opacity-70 flex items-center gap-2">
+                        <Zap size={14} className="text-primary" /> {subtitle}
+                    </p>
                 </div>
-                <ReactMarkdown>{content}</ReactMarkdown>
+                {guide && (
+                    <button 
+                        onClick={() => setShowGuide(!showGuide)}
+                        className="p-2 text-textSecondary hover:text-primary transition-all bg-surfaceHighlight/50 rounded-lg border border-border shrink-0"
+                    >
+                        {showGuide ? <X size={18} /> : <HelpCircle size={18} />}
+                    </button>
+                )}
             </div>
-            <div className="mt-6 pt-4 border-t border-border flex justify-end">
-                <Button size="sm" onClick={onClose}>Understood</Button>
-            </div>
-        </Modal>
+            {showGuide && guide && (
+                <div className="mt-6 p-6 glass border-primary/20 rounded-2xl shadow-xl animate-in slide-in-from-top-4 z-50">
+                    <div className="flex items-center gap-2 mb-4 text-primary border-b border-border pb-2">
+                        <Info size={16} />
+                        <h3 className="text-xs font-black uppercase tracking-widest">Protocol Guide</h3>
+                    </div>
+                    <div className="prose prose-invert max-w-none text-textPrimary leading-relaxed text-xs font-medium">
+                        <ReactMarkdown>{guide}</ReactMarkdown>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
-// New: Reusable Page Header
-export interface PageHeaderProps {
-    title: React.ReactNode;
-    subtitle: string;
-    guide?: string;
-}
-
-export const PageHeader = ({ title, subtitle, guide }: PageHeaderProps) => {
-  const [showGuide, setShowGuide] = useState(false);
-  return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 no-print gap-4">
-      <div>
-        <h1 className="text-3xl font-black text-textPrimary tracking-tight flex items-center gap-3">
-          {title}
-        </h1>
-        <p className="text-textSecondary text-sm font-medium tracking-wide mt-1">{subtitle}</p>
-      </div>
-      {guide && (
-        <>
-          <button 
-            type="button"
-            onClick={() => setShowGuide(true)}
-            className="self-start md:self-auto flex items-center gap-2 px-4 py-2 rounded-full bg-surfaceHighlight border border-border text-textSecondary hover:text-primary hover:border-primary transition-all shadow-sm group text-xs font-bold uppercase tracking-widest"
-            title="Open Clinical Guide"
-          >
-            <HelpCircle size={16} className="group-hover:scale-110 transition-transform" />
-            <span>Guide</span>
-          </button>
-          {showGuide && <PageGuide title="Clinical Module Protocol" content={guide} onClose={() => setShowGuide(false)} />}
-        </>
-      )}
+export const DisclaimerBox = ({ text, className }: { text: string; className?: string }) => (
+    <div className={clsx("bg-red-500/5 border border-red-500/10 rounded-2xl p-4 md:p-6 flex items-start gap-4 relative overflow-hidden", className)}>
+        <div className="absolute top-0 left-0 w-1 h-full bg-red-500/30"></div>
+        <AlertCircle className="text-red-500 shrink-0 mt-0.5" size={18} />
+        <p className="text-[10px] font-black text-textSecondary leading-relaxed uppercase tracking-widest opacity-80">{text}</p>
     </div>
-  );
-};
+);
+
+export const FileUpload = ({ label, onFileSelect, icon: Icon, color = 'primary' }: any) => (
+    <div onClick={() => (document.getElementById('file-inp') as any).click()} className={clsx(
+        "flex flex-col items-center justify-center gap-4 cursor-pointer group w-full h-full py-12 transition-all border-2 border-dashed rounded-3xl bg-surface/30",
+        color === 'primary' ? "border-primary/20 hover:bg-primary/5 hover:border-primary/40" : "border-emerald-500/20 hover:bg-emerald-500/5 hover:border-emerald-500/40"
+    )}>
+      <input type="file" id="file-inp" onChange={(e) => e.target.files?.[0] && onFileSelect(e.target.files[0])} className="hidden" />
+      <div className={clsx(
+        "p-5 bg-surface rounded-2xl border border-border group-hover:scale-105 transition-all shadow-sm",
+        color === 'primary' ? "group-hover:border-primary/50" : "group-hover:border-emerald-500/50"
+      )}>
+        <Icon className={clsx("h-8 w-8 transition-colors", color === 'primary' ? "text-primary group-hover:text-accent" : "text-emerald-500 group-hover:text-emerald-400")} />
+      </div>
+      <span className="font-black text-[10px] uppercase tracking-widest text-textPrimary group-hover:text-primary transition-colors text-center px-6 leading-relaxed">{label}</span>
+    </div>
+);
